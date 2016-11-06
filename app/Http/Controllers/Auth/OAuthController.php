@@ -1,10 +1,12 @@
-<?php
+<?php namespace App\Http\Controllers\Auth;
 
-namespace App\Http\Controllers;
+use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
-
-class HomeController extends Controller
+/**
+ * Class OAuthController
+ * @package App\Http\Controllers\Auth
+ */
+class OAuthController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -23,6 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home')->with('token', \Auth::user()->createToken('test')->accessToken);
+        return view('auth.oauth.client-access-token');
     }
 }

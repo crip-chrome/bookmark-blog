@@ -1,17 +1,17 @@
 <?php namespace App;
 
 /**
- * Class BookmarkPage
+ * Class BookmarkFolder
  * @package App
  */
-class BookmarkPage extends BookmarkBase
+class BookmarkFolder extends BookmarkBase
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'bookmark_pages';
+    protected $table = 'bookmark_folders';
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +22,6 @@ class BookmarkPage extends BookmarkBase
         'parent_id',
         'page_id',
         'date_added',
-        'title',
-        'url'
+        'title'
     ];
 }
