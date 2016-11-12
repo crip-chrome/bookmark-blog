@@ -1,7 +1,6 @@
 <?php namespace App\Http\ApiControllers;
 
 use App\Bookmark;
-use App\BookmarkBase;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -25,7 +24,9 @@ class BookmarksController extends Controller
      */
     public function created(Request $request)
     {
-        dd(new Bookmark($request));
+        $model = new Bookmark($request);
+        $model->save();
+        dd($model->toArray());
     }
 
     /**

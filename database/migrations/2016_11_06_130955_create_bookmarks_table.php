@@ -18,9 +18,9 @@ class CreateBookmarksTable extends Migration
             $table->unsignedInteger('parent_id')->index();
             $table->unsignedInteger('page_id')->unique();
             $table->timestamp('date_added');
-            $table->unsignedInteger('index');
+            $table->unsignedInteger('index')->default(0);
             $table->string('title');
-            $table->string('url', 500);
+            $table->string('url', 500)->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ class CreateBookmarksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookmark_pages');
+        Schema::dropIfExists('bookmarks');
     }
 }

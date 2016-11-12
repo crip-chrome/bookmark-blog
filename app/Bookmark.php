@@ -14,7 +14,7 @@ class Bookmark extends Model
      *
      * @var string
      */
-    protected $table = 'bookmark_pages';
+    protected $table = 'bookmarks';
 
     /**
      * The attributes that are mass assignable.
@@ -24,9 +24,19 @@ class Bookmark extends Model
     protected $fillable = [
         'parent_id',
         'page_id',
+        'user_id',
         'date_added',
         'title',
         'url'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'date_added' => 'timestamp',
     ];
 
     /**
@@ -45,6 +55,7 @@ class Bookmark extends Model
         $attributes['index'] = $request->index;
         $attributes['old_index'] = $request->oldIndex;
         $attributes['old_parent_id'] = $request->oldParentId;
+        $attributes['user_id'] = \Auth::user()->id;
 
         parent::__construct($attributes);
     }
