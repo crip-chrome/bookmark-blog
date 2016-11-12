@@ -42,4 +42,8 @@ return [
         'subfolder' => 'public/', // include trailing slash, like 'my_folder/'
     ],
 
+    'routes' => [
+        'prefix' => 'admin'
+    ]
+
 ];

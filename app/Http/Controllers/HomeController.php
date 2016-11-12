@@ -23,6 +23,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home')->with('token', \Auth::user()->createToken('test')->accessToken);
+        return view('home');
     }
 }

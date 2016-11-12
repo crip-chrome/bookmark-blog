@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2560ad1db22c7d2a7d13df26b224aa5b",
-    "content-hash": "f0d77cfa6a981ffd0170a913d9d5e910",
+    "hash": "db349085830d58ef8c249b5e46c2168a",
+    "content-hash": "0572a729b6f8c6523fde9b3b24716b6f",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -1168,16 +1168,16 @@
         },
         {
             "name": "laravel/passport",
-            "version": "v1.0.9",
+            "version": "v1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/passport.git",
-                "reference": "e5b96c9da0b2ee8c080a35647e01587fd8c2263b"
+                "reference": "3c957edb0f0894e05db94891a76fde0ab187bcfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/passport/zipball/e5b96c9da0b2ee8c080a35647e01587fd8c2263b",
-                "reference": "e5b96c9da0b2ee8c080a35647e01587fd8c2263b",
+                "url": "https://api.github.com/repos/laravel/passport/zipball/3c957edb0f0894e05db94891a76fde0ab187bcfe",
+                "reference": "3c957edb0f0894e05db94891a76fde0ab187bcfe",
                 "shasum": ""
             },
             "require": {
@@ -1228,7 +1228,7 @@
                 "oauth",
                 "passport"
             ],
-            "time": "2016-10-27 19:10:18"
+            "time": "2016-11-11 19:05:06"
         },
         {
             "name": "lcobucci/jwt",
@@ -1780,16 +1780,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "c0125896dbb151380ab47e96c621741e79623beb"
+                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/c0125896dbb151380ab47e96c621741e79623beb",
-                "reference": "c0125896dbb151380ab47e96c621741e79623beb",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
+                "reference": "a9b97968bcde1c4de2a5ec6cbd06a0f6c919b46e",
                 "shasum": ""
             },
             "require": {
@@ -1824,7 +1824,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2016-10-17 15:23:22"
+            "time": "2016-11-07 23:38:38"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -3062,16 +3062,16 @@
         },
         {
             "name": "tcg/voyager",
-            "version": "v0.9.19",
+            "version": "v0.9.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/the-control-group/voyager.git",
-                "reference": "638b6b472a6888d63860bd8ac157653ae11edeb0"
+                "reference": "7ac2c7f92af2e8231bb8899e0c7e6f29ff4442b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/638b6b472a6888d63860bd8ac157653ae11edeb0",
-                "reference": "638b6b472a6888d63860bd8ac157653ae11edeb0",
+                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/7ac2c7f92af2e8231bb8899e0c7e6f29ff4442b2",
+                "reference": "7ac2c7f92af2e8231bb8899e0c7e6f29ff4442b2",
                 "shasum": ""
             },
             "require": {
@@ -3093,7 +3093,7 @@
                 }
             ],
             "description": "A Laravel Admin Package for The Control Group to make your life easier and steer your project in the right direction",
-            "time": "2016-11-04 21:34:04"
+            "time": "2016-11-12 00:36:27"
         },
         {
             "name": "vlucas/phpdotenv",
