@@ -2,7 +2,11 @@
 
 use App\Bookmark;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApiChangedBookmarkRequest;
 use App\Http\Requests\ApiCreatedBookmarkRequest;
+use App\Http\Requests\ApiMovedBookmarkRequest;
+use App\Http\Requests\ApiRemovedBookmarkRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
@@ -32,29 +36,79 @@ class BookmarksController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param ApiChangedBookmarkRequest $request
+     * @return Bookmark
      */
-    public function changed(Request $request)
+    public function changed(ApiChangedBookmarkRequest $request)
     {
-        dd(new Bookmark($request));
+        $model = $this->find($request->id);
+
+        $model->title = $request->title;
+        $model->url = $request->url;
+
+        $model->save();
+
+        return $model;
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param ApiMovedBookmarkRequest $request
+     * @return Bookmark
      */
-    public function moved(Request $request)
+    public function moved(ApiMovedBookmarkRequest $request)
     {
-        dd(new Bookmark($request));
+        $model = $this->find($request->id);
+
+        $model->index = $request->index;
+        $model->parent_id = $request->parentId;
+
+        $model->save();
+
+        return $model;
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param ApiRemovedBookmarkRequest $request
+     * @return JsonResponse
      */
-    public function removed(Request $request)
+    public function removed(ApiRemovedBookmarkRequest $request)
     {
-        dd(new Bookmark($request));
+        $model = $this->find($request->id);
+        $this->deleteChildren($model);
+
+        return new JsonResponse('true');
+    }
+
+    /**
+     * Recursive tree delete
+     *
+     * @param Bookmark $model
+     */
+    private function deleteChildren(Bookmark $model)
+    {
+        $children = Bookmark::where('user_id', \Auth::user()->id)
+            ->where('parent_id', $model->id)
+            ->get();
+
+        foreach ($children as $child) {
+            $this->deleteChildren($child);
+        }
+
+        $model->delete();
+    }
+
+    /**
+     * Find Bookmark by auth user id and page_id
+     *
+     * @param int $id
+     * @return Bookmark
+     */
+    private function find(int $id)
+    {
+        $model = Bookmark::where('user_id', \Auth::user()->id)
+            ->where('page_id', $id)
+            ->first();
+
+        return $model;
     }
 }
