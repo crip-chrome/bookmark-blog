@@ -2,6 +2,7 @@
 
 use App\Bookmark;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ApiCreatedBookmarkRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -19,14 +20,15 @@ class BookmarksController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param ApiCreatedBookmarkRequest $request
+     * @return Bookmark
      */
-    public function created(Request $request)
+    public function created(ApiCreatedBookmarkRequest $request)
     {
         $model = new Bookmark($request);
         $model->save();
-        dd($model->toArray());
+
+        return $model;
     }
 
     /**
