@@ -80,9 +80,48 @@ class BookmarksController extends Controller
     }
 
     /**
+     * @param Request $request
+     */
+    public function sync(Request $request)
+    {
+        $ids = [];
+
+        $this->readChildren($ids, [$request->toArray()]);
+
+        Bookmark::whereNotIn('page_id', $ids)->where('user_id', \Auth::user()->id)->delete();
+    }
+
+    /**
+     * @param {&array} $ids
+     * @param {array} $source
+     */
+    private function readChildren(&$ids, $source)
+    {
+        foreach ($source as $children) {
+            $ids[] = $children['id'];
+
+            Bookmark::updateOrCreate([
+                'page_id' => $children['id'],
+                'user_id' => \Auth::user()->id,
+            ], [
+                'parent_id' => $children['parentId'],
+                'date_added' => $children['dateAdded'],
+                'title' => $children['title'],
+                'index' => $children['index'],
+                'url' => array_key_exists('url', $children) ? $children['url'] : '',
+            ]);
+
+            if (isset($children['children']) && count($children['children']) > 0) {
+                $this->readChildren($ids, $children['children']);
+            }
+        }
+    }
+
+    /**
      * Recursive tree delete
      *
      * @param Bookmark $model
+     * @private
      */
     private function deleteChildren(Bookmark $model)
     {
@@ -102,6 +141,7 @@ class BookmarksController extends Controller
      *
      * @param int $id
      * @return Bookmark
+     * @private
      */
     private function find(int $id)
     {
