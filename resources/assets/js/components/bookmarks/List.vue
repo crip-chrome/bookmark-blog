@@ -30,16 +30,20 @@
 
 <script>
     export default {
+
         mounted() {
-            this.$http.get(`/private/api/v1/bookmarks/1`).then((response) => {
-                this.bookmarks = response.data;
-            });
+            this.$http.get(`/private/api/v1/bookmarks/1`)
+                .then((response) => {
+                    this.bookmarks = response.data;
+                });
         },
+
         data() {
             return {
                 bookmarks: []
             }
-        }
+        },
+
     }
 </script>
 

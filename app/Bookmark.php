@@ -2,6 +2,7 @@
 
 use App\Http\Requests\FormRequest;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -80,18 +81,31 @@ class Bookmark extends Model
     }
 
     /**
-     * Create or update a record matching the attributes, and fill it with values.
-     *
-     * @param  array $attributes
-     * @param  array $values
-     * @return static
+     * @param Builder $query
+     * @return Builder
      */
-    public static function updateOrCreate(array $attributes, array $values = [])
+    public function scopeCurrentUser(Builder $query)
     {
-        $instance = static::firstOrNew($attributes);
+        return $query->where('user_id', \Auth::user()->id);
+    }
 
-        $instance->fill($values)->save();
+    /**
+     * @param Builder $query
+     * @param int $parent_id
+     * @return Builder
+     */
+    public function scopeParent(Builder $query, $parent_id)
+    {
+        return $query->where('parent_id', $parent_id);
+    }
 
-        return $instance;
+    /**
+     * @param Builder $query
+     * @param int $page_id
+     * @return Builder
+     */
+    public function scopePage(Builder $query, $page_id)
+    {
+        return $query->where('page_id', $page_id);
     }
 }

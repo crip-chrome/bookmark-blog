@@ -29,19 +29,49 @@ class BookmarksApiController extends Controller
      * @param {int} $page_id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getByParent($page_id)
+    public function getBookmarkChildren($page_id)
     {
-        $bookmark = $this->bookmark->newQuery()
-            ->where('user_id', \Auth::user()->id)
-            ->where('page_id', $page_id)
-            ->firstOrFail(['title'])
-            ->toArray();
-
-        $bookmark['children'] = $this->bookmark->newQuery()
-            ->where('user_id', \Auth::user()->id)
-            ->where('parent_id', $page_id)
+        $children = $this->bookmark
+            ->newQuery()
+            ->currentUser()
+            ->parent($page_id)
             ->get();
 
-        return JsonResponse::create($bookmark);
+        return JsonResponse::create($children);
+    }
+
+    /**
+     * @param {int} $page_id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getBookmarkTree($page_id)
+    {
+        $current = $this->bookmark
+            ->newQuery()
+            ->currentUser()
+            ->page($page_id)
+            ->firstOrFail()
+            ->toArray();
+
+        $tree = [];
+        $this->addParent($tree, $current['parent_id']);
+
+        return JsonResponse::create(compact('current', 'tree'));
+    }
+
+    private function addParent(&$target, $parent_id)
+    {
+        if ($parent_id != 0) {
+            $next = $this->bookmark
+                ->newQuery()
+                ->currentUser()
+                ->page($target['parent_id'])
+                ->firstOrFail()
+                ->toArray();
+
+            array_unshift($target, $next);
+
+            $this->addParent($target, $next['parent_id']);
+        }
     }
 }
