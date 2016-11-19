@@ -13,10 +13,12 @@
   <!-- Styles -->
   <link href="/css/app.css" rel="stylesheet">
 
-  <!-- Scripts -->
-  <script>
-    window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!}
-  </script>
+  <style>
+    #logout-form {
+      display: none;
+    }
+  </style>
+
 </head>
 <body>
 <div id="app">
@@ -58,18 +60,17 @@
 
               <ul class="dropdown-menu" role="menu">
                 <li>
-                  <a href="{{ url('/logout') }}"
-                     onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                  <a href="{{ route('logout') }}"
+                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Logout
                   </a>
 
-                  <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST">
                     {{ csrf_field() }}
                   </form>
                 </li>
                 <li>
-                  <a href="{{ url('/client-auth') }}">Manage Authorizations</a>
+                  <a href="{{ route('admin-oauth') }}">Manage Authorizations</a>
                 </li>
               </ul>
             </li>
@@ -83,6 +84,7 @@
 </div>
 
 <!-- Scripts -->
+<script>window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!};</script>
 <script src="/js/app.js"></script>
 </body>
 </html>

@@ -29,8 +29,6 @@ class BookmarksController extends Controller
         $this->bookmark = (new Bookmark())->newQuery();
     }
 
-    //// Api extension methods BEGIN
-
     /**
      * @param ApiCreatedBookmarkRequest $request
      * @return Bookmark
@@ -98,28 +96,6 @@ class BookmarksController extends Controller
 
         Bookmark::whereNotIn('page_id', $ids)->where('user_id', \Auth::user()->id)->delete();
     }
-
-    //// Api extension methods END
-
-    //// User api methods BEGIN
-
-
-    /**
-     * @param $parent_id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getByParent($parent_id)
-    {
-        $bookmarks = $this->bookmark
-            ->where('user_id', \Auth::user()->id)
-            ->where('parent_id', $parent_id)
-            ->get();
-
-        return JsonResponse::create($bookmarks);
-    }
-
-    //// User api methods END
-
 
     /**
      * @param {&array} $ids

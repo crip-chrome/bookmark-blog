@@ -1,10 +1,10 @@
-<?php namespace App\Http\Controllers\Auth;
+<?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
 /**
  * Class OAuthController
- * @package App\Http\Controllers\Auth
+ * @package App\Http\Controllers\Admin
  */
 class OAuthController extends Controller
 {

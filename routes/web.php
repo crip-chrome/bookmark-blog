@@ -17,5 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
-Route::get('/client-auth', 'Auth\\OAuthController@index');
+Route::get('/admin/home', 'Admin\\HomeController@index')->name('admin-home');
+Route::get('/admin/client-auth', 'Admin\\OAuthController@index')->name('admin-oauth');
+
+Route::get('/home', 'BookmarksController@index')->name('home');
+
+Route::group(['prefix' => 'private/api/v1/bookmarks'], function (\Illuminate\Routing\Router $router) {
+    $router->get('{page_id}', 'Admin\\BookmarksApiController@getByParent');
+});
