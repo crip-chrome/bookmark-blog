@@ -8,4 +8,6 @@ Route::group(['prefix' => 'bookmarks'], function (\Illuminate\Routing\Router $ro
     $router->post('changed-position', 'BookmarksController@moved');
     $router->post('moved-away', 'BookmarksController@removed');
     $router->post('sync', 'BookmarksController@sync');
+
+    $router->get('{parent_id}', 'BookmarksController@getByParent');
 });

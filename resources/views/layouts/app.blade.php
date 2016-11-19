@@ -68,11 +68,6 @@
                     {{ csrf_field() }}
                   </form>
                 </li>
-                @if(Auth::user()->hasRole('admin'))
-                  <li>
-                    <a href="{{ url(config('voyager.routes.prefix')) }}">Admin panel</a>
-                  </li>
-                @endif
                 <li>
                   <a href="{{ url('/client-auth') }}">Manage Authorizations</a>
                 </li>

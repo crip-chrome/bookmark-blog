@@ -25,6 +25,6 @@ class OAuthController extends Controller
      */
     public function index()
     {
-        return view('auth.oauth.client-access-token');
+        return view('admin.oauth.client-access-token');
     }
 }

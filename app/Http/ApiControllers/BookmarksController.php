@@ -16,12 +16,20 @@ use Illuminate\Http\Request;
 class BookmarksController extends Controller
 {
     /**
+     * @var \Illuminate\Database\Eloquent\Builder
+     */
+    private $bookmark;
+
+    /**
      * Create a new controller instance.
      */
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->bookmark = (new Bookmark())->newQuery();
     }
+
+    //// Api extension methods BEGIN
 
     /**
      * @param ApiCreatedBookmarkRequest $request
@@ -91,6 +99,28 @@ class BookmarksController extends Controller
         Bookmark::whereNotIn('page_id', $ids)->where('user_id', \Auth::user()->id)->delete();
     }
 
+    //// Api extension methods END
+
+    //// User api methods BEGIN
+
+
+    /**
+     * @param $parent_id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getByParent($parent_id)
+    {
+        $bookmarks = $this->bookmark
+            ->where('user_id', \Auth::user()->id)
+            ->where('parent_id', $parent_id)
+            ->get();
+
+        return JsonResponse::create($bookmarks);
+    }
+
+    //// User api methods END
+
+
     /**
      * @param {&array} $ids
      * @param {array} $source
@@ -125,11 +155,12 @@ class BookmarksController extends Controller
      */
     private function deleteChildren(Bookmark $model)
     {
-        $children = Bookmark::where('user_id', \Auth::user()->id)
+        $children = $this->bookmark->where('user_id', \Auth::user()->id)
             ->where('parent_id', $model->id)
             ->get();
 
         foreach ($children as $child) {
+            /** @var Bookmark $child */
             $this->deleteChildren($child);
         }
 
@@ -145,7 +176,8 @@ class BookmarksController extends Controller
      */
     private function find(int $id)
     {
-        $model = Bookmark::where('user_id', \Auth::user()->id)
+        /** @var Bookmark $model */
+        $model = $this->bookmark->where('user_id', \Auth::user()->id)
             ->where('page_id', $id)
             ->first();
 
