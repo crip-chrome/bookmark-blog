@@ -24,16 +24,11 @@
         methods: {
 
             loadPage(page_id) {
-                this.$Progress.start();
                 page_id = page_id || this.$route.params.page;
                 this.$http.get(`/private/api/v1/bookmarks/${page_id}/tree`)
                     .then((response) => {
                         this.current = response.data.current;
                         this.tree = response.data.tree;
-                        this.$Progress.finish();
-                    })
-                    .catch((response) => {
-                        this.$Progress.fail();
                     });
             },
 

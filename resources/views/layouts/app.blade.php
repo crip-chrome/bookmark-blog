@@ -60,6 +60,12 @@
 
               <ul class="dropdown-menu" role="menu">
                 <li>
+                  <a href="{{ route('admin-home') }}">Dashboard</a>
+                </li>
+                <li>
+                  <a href="{{ route('admin-oauth') }}">Authorizations</a>
+                </li>
+                <li>
                   <a href="{{ route('logout') }}"
                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Logout
@@ -68,9 +74,6 @@
                   <form id="logout-form" action="{{ route('logout') }}" method="POST">
                     {{ csrf_field() }}
                   </form>
-                </li>
-                <li>
-                  <a href="{{ route('admin-oauth') }}">Manage Authorizations</a>
                 </li>
               </ul>
             </li>

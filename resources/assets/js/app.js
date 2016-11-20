@@ -14,13 +14,6 @@ Vue.http.interceptors.push((request, next) => {
     next();
 });
 
-import VueProgressBar from 'vue-progressbar';
-const options = {
-    color: '#2873c4',
-    failedColor: '#d9534f',
-};
-Vue.use(VueProgressBar, options);
-
 window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
