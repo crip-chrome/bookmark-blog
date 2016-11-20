@@ -24,7 +24,7 @@
 
         mounted() {
             let page_id = this.$route.params.bookmark;
-            this.$http.get(`/private/api/v1/bookmarks/${page_id}/details`)
+            this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
                 .then((response) => {
                     this.bookmark = response.data;
                 });

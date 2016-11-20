@@ -47,6 +47,11 @@ class BookmarksController extends Controller
             'user_id' => \Auth::user()->id,
         ];
 
+        $parent = $this->find($request->parentId);
+        if ($parent) {
+            $attributes['visible'] = $parent->visible;
+        }
+
         $model = new Bookmark($attributes);
         $model->save();
 

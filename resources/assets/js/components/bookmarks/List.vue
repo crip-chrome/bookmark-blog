@@ -20,7 +20,7 @@
           <tbody>
           <router-link v-for="b in bookmark.children" :to="getRoute(b)" tag="tr"
                        class="pointee">
-            <td>{{ b.page_id }}</td>
+            <td :class="{ 'line-through': !b.visible }">{{ b.page_id }}</td>
             <td>{{ b.title }}</td>
             <td>{{ b.url }}</td>
             <td>
@@ -98,5 +98,9 @@
 </script>
 
 <style>
+
+  .line-through {
+    text-decoration: line-through;
+  }
 
 </style>

@@ -35,7 +35,7 @@ class BookmarksApiController extends Controller
         $bookmark = $this->bookmark->newQuery()->currentUser()->page($page_id)
             ->with(['children' => function ($query) {
                 $query->orderBy('index')->orderBy('date_added');
-            }, implode('.', array_fill(0, 100, 'parent'))])->firstOrFail();
+            }, $this->implodeStrings('parent')])->firstOrFail();
 
         return JsonResponse::create($bookmark);
     }
@@ -46,11 +46,26 @@ class BookmarksApiController extends Controller
      */
     public function saveBookmark(Request $request)
     {
-        $bookmark = $this->bookmark->newQuery()->currentUser()->page($request->page_id)->firstOrFail();
+        $bookmark = $this->bookmark->newQuery()->currentUser()->page($request->page_id)
+            ->with($this->implodeStrings('children'))->firstOrFail();
 
-        $bookmark->visible = !!$request->visible;
-        $bookmark->save();
+        $this->saveVisibility($bookmark, !!$request->visible);
 
         return JsonResponse::create($bookmark);
+    }
+
+    private function implodeStrings($val, $times = 100)
+    {
+        return implode('.', array_fill(0, $times, $val));
+    }
+
+    private function saveVisibility($bookmark, $value)
+    {
+        $bookmark->visible = $value;
+        $bookmark->save();
+
+        foreach ($bookmark->children as $children) {
+            $this->saveVisibility($children, $value);
+        }
     }
 }
