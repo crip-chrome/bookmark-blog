@@ -3,8 +3,8 @@
 @section('content')
   <div class="container">
     <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <bookmarks-list></bookmarks-list>
+      <div class="col-md-8 col-md-offset-2" id="app">
+
       </div>
     </div>
   </div>

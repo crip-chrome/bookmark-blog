@@ -56,6 +56,8 @@ class BookmarksApiController extends Controller
         $tree = [];
         $this->addParent($tree, $current['parent_id']);
 
+        sleep(5);
+
         return JsonResponse::create(compact('current', 'tree'));
     }
 
@@ -65,7 +67,7 @@ class BookmarksApiController extends Controller
             $next = $this->bookmark
                 ->newQuery()
                 ->currentUser()
-                ->page($target['parent_id'])
+                ->page($parent_id)
                 ->firstOrFail()
                 ->toArray();
 
