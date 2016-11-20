@@ -26,7 +26,7 @@ class BookmarksApiController extends Controller
     }
 
     /**
-     * @param {int} $page_id
+     * @param int $page_id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function getBookmarkChildren($page_id)
@@ -35,13 +35,14 @@ class BookmarksApiController extends Controller
             ->newQuery()
             ->currentUser()
             ->parent($page_id)
+            ->orderBy('index', 'date_added')
             ->get();
 
         return JsonResponse::create($children);
     }
 
     /**
-     * @param {int} $page_id
+     * @param int $page_id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function getBookmarkTree($page_id)
@@ -57,6 +58,21 @@ class BookmarksApiController extends Controller
         $this->addParent($tree, $current['parent_id']);
 
         return JsonResponse::create(compact('current', 'tree'));
+    }
+
+    /**
+     * @param int $page_id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function getBookmark($page_id)
+    {
+        $bookmark = $this->bookmark
+            ->newQuery()
+            ->currentUser()
+            ->page($page_id)
+            ->firstOrFail();
+
+        return JsonResponse::create($bookmark);
     }
 
     private function addParent(&$target, $parent_id)

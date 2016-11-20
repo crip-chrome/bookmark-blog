@@ -25,4 +25,5 @@ Route::get('/home', 'BookmarksController@index')->name('home');
 Route::group(['prefix' => 'private/api/v1/bookmarks'], function (\Illuminate\Routing\Router $router) {
     $router->get('{page_id}', 'Admin\\BookmarksApiController@getBookmarkChildren');
     $router->get('{page_id}/tree', 'Admin\\BookmarksApiController@getBookmarkTree');
+    $router->get('{page_id}/details', 'Admin\\BookmarksApiController@getBookmark');
 });

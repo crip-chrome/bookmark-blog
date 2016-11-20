@@ -39,7 +39,7 @@ class Bookmark extends Model
      * @var array
      */
     protected $casts = [
-        'date_added' => 'timestamp',
+        'date_added' => 'datetime',
     ];
 
     /**
