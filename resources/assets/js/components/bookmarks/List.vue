@@ -6,7 +6,7 @@
 
       <div class="panel-body">
 
-        <breadcrumb></breadcrumb>
+        <breadcrumb :bookmark="bookmark"></breadcrumb>
 
         <table class="table table-hover">
           <thead>
@@ -14,14 +14,20 @@
             <th>#</th>
             <th>Title</th>
             <th>URL</th>
+            <th></th>
           </tr>
           </thead>
           <tbody>
-          <router-link v-for="b in bookmarks" :to="getRoute(b)" tag="tr"
+          <router-link v-for="b in bookmark.children" :to="getRoute(b)" tag="tr"
                        class="pointee">
             <td>{{ b.page_id }}</td>
             <td>{{ b.title }}</td>
             <td>{{ b.url }}</td>
+            <td>
+              <router-link :to="{name: 'bookmark-edit',params: {page: b.parent_id,bookmark: b.page_id}}">
+                Edit
+              </router-link>
+            </td>
           </router-link>
           </tbody>
         </table>
@@ -48,7 +54,7 @@
 
         data() {
             return {
-                bookmarks: []
+                bookmark: {}
             }
         },
 
@@ -58,7 +64,7 @@
                 page_id = page_id || this.$route.params.page;
                 this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
                     .then((response) => {
-                        this.bookmarks = response.data;
+                        this.bookmark = response.data;
                     });
             },
 

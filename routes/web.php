@@ -23,7 +23,6 @@ Route::get('/admin/client-auth', 'Admin\\OAuthController@index')->name('admin-oa
 Route::get('/home', 'BookmarksController@index')->name('home');
 
 Route::group(['prefix' => 'private/api/v1/bookmarks'], function (\Illuminate\Routing\Router $router) {
-    $router->get('{page_id}', 'Admin\\BookmarksApiController@getBookmarkChildren');
-    $router->get('{page_id}/tree', 'Admin\\BookmarksApiController@getBookmarkTree');
-    $router->get('{page_id}/details', 'Admin\\BookmarksApiController@getBookmark');
+    $router->get('{page_id}', 'Admin\\BookmarksApiController@getBookmark');
+    $router->post('{page_id}', 'Admin\\BookmarksApiController@saveBookmark');
 });

@@ -3,6 +3,7 @@
 use App\Bookmark;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Class BookmarksApiController
@@ -29,65 +30,27 @@ class BookmarksApiController extends Controller
      * @param int $page_id
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function getBookmarkChildren($page_id)
-    {
-        $children = $this->bookmark
-            ->newQuery()
-            ->currentUser()
-            ->parent($page_id)
-            ->orderBy('index', 'date_added')
-            ->get();
-
-        return JsonResponse::create($children);
-    }
-
-    /**
-     * @param int $page_id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
-    public function getBookmarkTree($page_id)
-    {
-        $current = $this->bookmark
-            ->newQuery()
-            ->currentUser()
-            ->page($page_id)
-            ->firstOrFail()
-            ->toArray();
-
-        $tree = [];
-        $this->addParent($tree, $current['parent_id']);
-
-        return JsonResponse::create(compact('current', 'tree'));
-    }
-
-    /**
-     * @param int $page_id
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     public function getBookmark($page_id)
     {
-        $bookmark = $this->bookmark
-            ->newQuery()
-            ->currentUser()
-            ->page($page_id)
-            ->firstOrFail();
+        $bookmark = $this->bookmark->newQuery()->currentUser()->page($page_id)
+            ->with(['children' => function ($query) {
+                $query->orderBy('index')->orderBy('date_added');
+            }, implode('.', array_fill(0, 100, 'parent'))])->firstOrFail();
 
         return JsonResponse::create($bookmark);
     }
 
-    private function addParent(&$target, $parent_id)
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function saveBookmark(Request $request)
     {
-        if ($parent_id != 0) {
-            $next = $this->bookmark
-                ->newQuery()
-                ->currentUser()
-                ->page($parent_id)
-                ->firstOrFail()
-                ->toArray();
+        $bookmark = $this->bookmark->newQuery()->currentUser()->page($request->page_id)->firstOrFail();
 
-            array_unshift($target, $next);
+        $bookmark->visible = !!$request->visible;
+        $bookmark->save();
 
-            $this->addParent($target, $next['parent_id']);
-        }
+        return JsonResponse::create($bookmark);
     }
 }

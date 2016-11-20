@@ -35,7 +35,19 @@ class BookmarksController extends Controller
      */
     public function created(ApiCreatedBookmarkRequest $request)
     {
-        $model = new Bookmark($request);
+        $attributes = [
+            'parent_id' => $request->parentId,
+            'page_id' => $request->id,
+            'date_added' => $request->dateAdded,
+            'title' => $request->title,
+            'url' => $request->url,
+            'index' => $request->index,
+            'old_index' => $request->oldIndex,
+            'old_parent_id' => $request->oldParentId,
+            'user_id' => \Auth::user()->id,
+        ];
+
+        $model = new Bookmark($attributes);
         $model->save();
 
         return $model;

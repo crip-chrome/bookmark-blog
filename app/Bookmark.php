@@ -30,7 +30,8 @@ class Bookmark extends Model
         'user_id',
         'date_added',
         'title',
-        'url'
+        'url',
+        'visible'
     ];
 
     /**
@@ -41,37 +42,6 @@ class Bookmark extends Model
     protected $casts = [
         'date_added' => 'datetime',
     ];
-
-    /**
-     * Create a new Eloquent model instance.
-     *
-     * @param Request $request
-     * @param  array $attributes
-     */
-    public function __construct()
-    {
-        $num_args = func_num_args();
-        $attributes = [];
-
-        if ($num_args == 1 && gettype(func_get_arg(0)) == 'array') {
-            $attributes = func_get_arg(0);
-        } elseif ($num_args == 1 && get_parent_class(func_get_arg(0)) == FormRequest::class) {
-            /** @var FormRequest $request */
-            $request = func_get_arg(0);
-
-            $attributes['parent_id'] = $request->parentId;
-            $attributes['page_id'] = $request->id;
-            $attributes['date_added'] = $request->dateAdded;
-            $attributes['title'] = $request->title;
-            $attributes['url'] = $request->url;
-            $attributes['index'] = $request->index;
-            $attributes['old_index'] = $request->oldIndex;
-            $attributes['old_parent_id'] = $request->oldParentId;
-            $attributes['user_id'] = \Auth::user()->id;
-        }
-
-        parent::__construct($attributes);
-    }
 
     public function setDateAddedAttribute($value)
     {
@@ -107,5 +77,22 @@ class Bookmark extends Model
     public function scopePage(Builder $query, $page_id)
     {
         return $query->where('page_id', $page_id);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(Bookmark::class, 'parent_id', 'page_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Bookmark::class, 'parent_id', 'page_id');
+
     }
 }
