@@ -15,7 +15,7 @@
 
         mounted() {
             $(this.$el).modal('show');
-            $(this.$el).on('hide.bs.modal', e => {
+            $(this.$el).on('hidden.bs.modal', e => {
                 this.onHide(e);
             });
         }

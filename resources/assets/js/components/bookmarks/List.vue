@@ -20,7 +20,7 @@
           <tbody>
           <router-link v-for="b in bookmark.children" :to="getRoute(b)" tag="tr"
                        class="pointee">
-            <td :class="{ 'line-through': !b.visible }">{{ b.page_id }}</td>
+            <td :class="{ 'text-success': b.visible, 'text-danger': !b.visible }">{{ b.page_id }}</td>
             <td>{{ b.title }}</td>
             <td>{{ b.url }}</td>
             <td>
@@ -61,6 +61,9 @@
         methods: {
 
             loadPage(page_id) {
+                // ensure that there is no backdrops when using back button
+                $('.modal-backdrop').remove();
+
                 page_id = page_id || this.$route.params.page;
                 this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
                     .then((response) => {
