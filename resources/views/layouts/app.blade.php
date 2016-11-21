@@ -63,9 +63,6 @@
                   <a href="{{ route('admin-home') }}">Dashboard</a>
                 </li>
                 <li>
-                  <a href="{{ route('admin-oauth') }}">Authorizations</a>
-                </li>
-                <li>
                   <a href="{{ route('logout') }}"
                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Logout

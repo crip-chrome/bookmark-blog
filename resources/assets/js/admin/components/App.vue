@@ -37,10 +37,7 @@
                   <router-link :to="{ name: 'tokens' }">Authorizations</router-link>
                 </li>
                 <li>
-                  <a href="/logout"
-                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Logout
-                  </a>
+                  <a href="/logout" @click="logout">Logout</a>
 
                   <form id="logout-form" action="/logout" method="POST">
                     <input type="hidden" name="_token" v-model="csrf_token">
@@ -68,7 +65,7 @@
         computed: {
 
             app_name() {
-                return $('title').innerText;
+                return $('title').text();
             },
 
             user_name() {
@@ -78,6 +75,15 @@
             csrf_token() {
                 return $('meta[name="csrf-token"]').attr('content');
             }
-        }
+        },
+
+        methods: {
+
+            logout(e) {
+                e.preventDefault();
+                $('#logout-form').submit();
+            },
+
+        },
     }
 </script>
