@@ -31,8 +31,7 @@
 
         computed: {
             accessToken() {
-                return 1;
-                // TODO, read data from vuex state where should be accessToken value after creation
+                return this.$store.state.passport.accessToken;
             }
         },
 

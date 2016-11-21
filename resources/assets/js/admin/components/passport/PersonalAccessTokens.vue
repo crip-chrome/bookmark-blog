@@ -42,6 +42,8 @@
 </template>
 
 <script>
+    import * as mTypes from './../../store/mutations';
+
     export default {
 
         data() {
@@ -75,6 +77,7 @@
                 this.$http.get('/oauth/scopes')
                     .then(response => {
                         this.scopes = response.data;
+                        this.$store.commit(mTypes.access_scopes_change, this);
                     });
             },
 

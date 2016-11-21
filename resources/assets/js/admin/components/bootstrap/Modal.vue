@@ -13,7 +13,7 @@
 
         props: {
             onHide: {type: Function, required: true},
-            onShow: {type: Function, required: false, 'default': window.noop}
+            onShow: {type: Function, required: false, 'default': () => window.noop}
         },
 
         mounted() {

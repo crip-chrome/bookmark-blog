@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import bookmarks from './modules/bookmarks';
+import passport from './modules/passport';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    modules: {bookmarks}
+    modules: {passport}
 });
 
 export default store;

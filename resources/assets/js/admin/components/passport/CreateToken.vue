@@ -59,15 +59,15 @@
 </template>
 
 <script>
-    import Modal from '../bootstrap/Modal.vue';
+    import Modal from './../bootstrap/Modal.vue';
+    import * as mTypes from './../../store/mutations';
 
     export default {
 
         computed: {
 
             scopes() {
-                return [];
-                // TODO: get scopes from vuex state
+                return this.$store.state.passport.scopes;
             }
 
         },
@@ -100,7 +100,7 @@
                         this.form.scopes = [];
                         this.form.errors = [];
 
-                        // TODO: mutate vuex state with accessToken value
+                        this.$store.commit(mTypes.access_token_change, response.data);
                         this.$router.push({name: 'token-created'});
                     })
                     .catch(response => {
