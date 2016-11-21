@@ -1,3 +1,8 @@
+window._ = require('lodash');
+window.$ = window.jQuery = require('jquery');
+window.noop = function () {
+};
+
 import Vue from 'vue';
 import App from './components/App.vue';
 import store from './store';
@@ -13,9 +18,6 @@ Vue.http.interceptors.push((request, next) => {
 
     next();
 });
-
-window._ = require('lodash');
-window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 let app = new Vue(Vue.util.extend({

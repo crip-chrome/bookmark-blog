@@ -18,7 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/admin/home/{subs?}', 'Admin\\HomeController@index')->name('admin-home')->where(['subs' => '.*']);
-Route::get('/admin/client-auth', 'Admin\\OAuthController@index')->name('admin-oauth');
+Route::get('/admin/{subs?}', 'Admin\\HomeController@index')->name('admin')->where(['subs' => '.*']);
 
 Route::get('/home', 'BookmarksController@index')->name('home');
 

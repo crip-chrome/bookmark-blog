@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import Modal from './../bootstrap/Modal.vue';
+    import Modal from '../bootstrap/Modal.vue';
 
     export default {
 
