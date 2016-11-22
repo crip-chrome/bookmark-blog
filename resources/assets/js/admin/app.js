@@ -1,3 +1,4 @@
+import 'es6-promise/auto';
 window.$ = window.jQuery = require('jquery');
 window.noop = function () {
 };
