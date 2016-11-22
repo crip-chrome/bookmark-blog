@@ -93,6 +93,13 @@ class Bookmark extends Model
     public function parent()
     {
         return $this->belongsTo(Bookmark::class, 'parent_id', 'page_id');
+    }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

@@ -19,7 +19,7 @@ class BookmarksController extends Controller
      */
     public function __construct(Bookmark $bookmark)
     {
-        $this->bookmark = $bookmark->newQuery();
+        $this->bookmark = $bookmark;
     }
 
     /**
@@ -27,6 +27,19 @@ class BookmarksController extends Controller
      */
     public function index()
     {
-        return view('bookmarks.home');
+        $bookmarks = $this->bookmark->newQuery()->orderBy('date_added', false)->with('user')
+            ->where('url', '<>', '')->where('visible', true)->paginate();
+
+        $result = [];
+
+        foreach ($bookmarks as $bookmark) {
+            $date = $bookmark->date_added->toDateString();
+            if (!array_key_exists($date, $result))
+                $result[$date] = [];
+
+            $result[$date][] = $bookmark;
+        }
+
+        return view('bookmarks.home')->with(['days' => $result, 'paging' => $bookmarks]);
     }
 }
