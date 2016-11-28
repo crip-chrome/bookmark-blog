@@ -8,6 +8,7 @@
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="user-name" content="{{ Auth::user()->name }}">
+  <meta name="root-bookmark" content="{{ $bookmark ? $bookmark->page_id : 0 }}">
 
   <title>{{ config('app.name', 'Laravel') }}</title>
 

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import store from './store';
 
 Vue.use(Router);
 
@@ -28,6 +29,6 @@ export default new Router({
                 {path: 'created', name: 'token-created', component: ShowPersonalAccessTokenView}
             ]
         },
-        {path: '/admin/home/', redirect: '/admin/bookmarks/1'}
+        {path: '/admin/home/', redirect: `/admin/bookmarks/${store.state.bookmark.rootId}`}
     ]
 })

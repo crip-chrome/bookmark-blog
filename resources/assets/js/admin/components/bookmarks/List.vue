@@ -6,6 +6,13 @@
 
       <div class="panel-body">
 
+        <div class="alert alert-info" v-if="message">
+          <strong>Info!</strong> Please synchronize your bookmarks using
+          <a href="https://chrome.google.com/webstore/detail/chrome-bookmark-export-to/kbomgldpcakgidkmilpllehdfncedeak"
+             target="_blank">
+            Chrome extension</a> to see and manage items in this system.
+        </div>
+
         <breadcrumb :bookmark="bookmark"></breadcrumb>
 
         <table class="table table-hover">
@@ -54,7 +61,8 @@
 
         data() {
             return {
-                bookmark: {}
+                bookmark: {},
+                message: false
             }
         },
 
@@ -65,10 +73,15 @@
                 $('.modal-backdrop').remove();
 
                 page_id = page_id || this.$route.params.page;
-                this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
-                    .then((response) => {
-                        this.bookmark = response.data;
-                    });
+                if (page_id != 0) {
+                    this.message = false;
+                    this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
+                        .then((response) => {
+                            this.bookmark = response.data;
+                        });
+                } else {
+                    this.message = true
+                }
             },
 
             getRoute (bookmark) {

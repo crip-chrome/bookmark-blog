@@ -1,6 +1,8 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use App\Bookmark;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
 /**
@@ -20,10 +22,16 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        return view('admin.home');
+        if(\App::environment() != 'production') {
+            \Debugbar::info(sprintf('Current PHP version: %s', phpversion()));
+        }
+
+        $bookmark = Bookmark::where('user_id', \Auth::user()->id)->where('parent_id', 0)->first();
+
+        return view('admin.home')->with('bookmark', $bookmark);
     }
 }
