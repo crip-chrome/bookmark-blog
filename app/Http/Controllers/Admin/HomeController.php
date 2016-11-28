@@ -28,6 +28,7 @@ class HomeController extends Controller
     {
         if(\App::environment() != 'production') {
             \Debugbar::info(sprintf('Current PHP version: %s', phpversion()));
+            \Debugbar::info(sprintf('Current User id: %s', \Auth::user()->id));
         }
 
         $bookmark = Bookmark::where('user_id', \Auth::user()->id)->where('parent_id', 0)->first();
