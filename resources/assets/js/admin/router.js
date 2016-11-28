@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import store from './store';
+import $ from 'jquery';
 
 Vue.use(Router);
 
@@ -10,6 +10,8 @@ import BookmarkEditView from './components/bookmarks/Edit.vue';
 import PersonalAccessTokensView from './components/passport/PersonalAccessTokens.vue';
 import CreatePersonalAccessTokenView from './components/passport/CreateToken.vue';
 import ShowPersonalAccessTokenView from './components/passport/ShowToken.vue';
+
+const id = $('meta[name="root-bookmark"]').attr('content');
 
 export default new Router({
     mode: 'history',
@@ -29,6 +31,6 @@ export default new Router({
                 {path: 'created', name: 'token-created', component: ShowPersonalAccessTokenView}
             ]
         },
-        {path: '/admin/home/', redirect: `/admin/bookmarks/${store.state.bookmark.rootId}`}
+        {path: '/admin/home/', redirect: `/admin/bookmarks/${id}`}
     ]
 })

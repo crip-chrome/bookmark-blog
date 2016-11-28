@@ -31,7 +31,7 @@
 
               <ul class="dropdown-menu" role="menu">
                 <li>
-                  <router-link :to="{ name: 'bookmarks', params: { page: 1 }}">Bookmarks</router-link>
+                  <router-link :to="root_route">Bookmarks</router-link>
                 </li>
                 <li>
                   <router-link :to="{ name: 'tokens' }">Authorizations</router-link>
@@ -61,20 +61,24 @@
 </template>
 
 <script>
+    import * as types from './../store/mutations'
+
     export default {
-        computed: {
 
-            app_name() {
-                return $('title').text();
-            },
+        data() {
 
-            user_name() {
-                return $('meta[name="user-name"]').attr('content');
-            },
-
-            csrf_token() {
-                return $('meta[name="csrf-token"]').attr('content');
+            return {
+                app_name: $('title').text(),
+                user_name: $('meta[name="user-name"]').attr('content'),
+                csrf_token: $('meta[name="csrf-token"]').attr('content'),
+                root_route: {
+                    name: 'bookmarks',
+                    params: {
+                        page: $('meta[name="root-bookmark"]').attr('content')
+                    }
+                }
             }
+
         },
 
         methods: {
