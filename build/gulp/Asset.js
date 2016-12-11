@@ -6,14 +6,14 @@ class Asset {
      * 
      * @param {string} path
      * @param {string} name
-     * @param {string} debugName
+     * @param {string} [debugName=null]
      * 
      * @memberOf Asset
      */
-    constructor(path, name, debugName) {
+    constructor(path, name, debugName = null) {
         this.path = path;
         this.name = name;
-        this.debugName = debugName;
+        this.debugName = debugName === null ? name : debugName;
     }
 
     /**
