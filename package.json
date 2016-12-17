@@ -1,17 +1,30 @@
 {
   "private": true,
   "scripts": {
-    "prod": "gulp --production",
-    "dev": "gulp watch"
+    "prod": "gulp --mode release",
+    "dev": "gulp"
   },
   "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.0.0",
+    "gulp-sourcemaps": "^1.9.1",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "vueify": "^9.4.0",
+    "watchify": "^3.8.0"
+  },
+  "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "es6-promise": "^4.0.5",
-    "gulp": "^3.9.1",
     "jquery": "^3.1.0",
-    "laravel-elixir": "^6.0.0-9",
-    "laravel-elixir-vue-2": "^0.2.0",
-    "laravel-elixir-webpack-official": "^1.0.2",
     "vue": "^2.0.1",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.0.3",

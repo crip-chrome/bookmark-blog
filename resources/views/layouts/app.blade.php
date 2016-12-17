@@ -11,7 +11,7 @@
   <title>{{ config('app.name', 'Laravel') }}</title>
 
   <!-- Styles -->
-  <link href="/css/app.css" rel="stylesheet">
+  <link href="/css/styles.css" rel="stylesheet">
 
   <style>
     #logout-form {
@@ -83,8 +83,7 @@
   @yield('content')
 </div>
 
-<!-- Scripts -->
-<script>window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!};</script>
-<script src="/js/app.js"></script>
+<!-- Scripts
+<script>window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!};</script>-->
 </body>
 </html>
