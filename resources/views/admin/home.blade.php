@@ -29,7 +29,6 @@
 
 <!-- Scripts -->
 <script>window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!};</script>
-<script src="/js/admin/vendor.js"></script>
-<script src="/js/admin/app.js"></script>
+<script src="/js/admin.app.js"></script>
 </body>
 </html>

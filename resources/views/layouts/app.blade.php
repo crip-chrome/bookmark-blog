@@ -85,7 +85,6 @@
 
 <!-- Scripts -->
 <script>window.Laravel = {!! json_encode([ 'csrfToken' => csrf_token() ]) !!};</script>
-<script src="/js/public/vendor.js"></script>
-<script src="/js/public/app.js"></script>
+<script src="/js/app.js"></script>
 </body>
 </html>
