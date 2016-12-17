@@ -6,6 +6,7 @@ use App\Http\Requests\ApiChangedBookmarkRequest;
 use App\Http\Requests\ApiCreatedBookmarkRequest;
 use App\Http\Requests\ApiMovedBookmarkRequest;
 use App\Http\Requests\ApiRemovedBookmarkRequest;
+use App\Jobs\SynchronizeBookmarks;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -104,40 +105,15 @@ class BookmarksController extends Controller
 
     /**
      * @param Request $request
+     * @return JsonResponse
      */
     public function sync(Request $request)
     {
-        $ids = [];
+        $data = $request->toArray();
+        $job = (new SynchronizeBookmarks($data, \Auth::user()->id))->onQueue('bookmarks');
+        $this->dispatch($job);
 
-        $this->readChildren($ids, [$request->toArray()]);
-
-        Bookmark::whereNotIn('page_id', $ids)->where('user_id', \Auth::user()->id)->delete();
-    }
-
-    /**
-     * @param {&array} $ids
-     * @param {array} $source
-     */
-    private function readChildren(&$ids, $source)
-    {
-        foreach ($source as $children) {
-            $ids[] = $children['id'];
-
-            Bookmark::updateOrCreate([
-                'page_id' => $children['id'],
-                'user_id' => \Auth::user()->id,
-            ], [
-                'parent_id' => $children['parentId'],
-                'date_added' => $children['dateAdded'],
-                'title' => $children['title'],
-                'index' => $children['index'],
-                'url' => array_key_exists('url', $children) ? $children['url'] : '',
-            ]);
-
-            if (isset($children['children']) && count($children['children']) > 0) {
-                $this->readChildren($ids, $children['children']);
-            }
-        }
+        return new JsonResponse(['message' => 'Request will be processed in background in minutes.']);
     }
 
     /**

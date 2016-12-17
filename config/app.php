@@ -2,6 +2,7 @@
 
 return [
     'name' => 'CRIP Bookmarks',
+    'admin' => 'tahq69@gmail.com',
     'env' => env('APP_ENV', 'production'),
     'debug' => env('APP_DEBUG', false),
     'url' => env('APP_URL', 'http://localhost'),
