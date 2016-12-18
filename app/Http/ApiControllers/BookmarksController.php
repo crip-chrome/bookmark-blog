@@ -7,6 +7,8 @@ use App\Http\Requests\ApiCreatedBookmarkRequest;
 use App\Http\Requests\ApiMovedBookmarkRequest;
 use App\Http\Requests\ApiRemovedBookmarkRequest;
 use App\Jobs\SynchronizeBookmarks;
+use App\Services\Bookmark\BookmarkTagsService;
+use App\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -22,12 +24,19 @@ class BookmarksController extends Controller
     private $bookmark;
 
     /**
-     * Create a new controller instance.
+     * @var BookmarkTagsService
      */
-    public function __construct()
+    private $service;
+
+    /**
+     * Create a new controller instance.
+     * @param BookmarkTagsService $service
+     */
+    public function __construct(BookmarkTagsService $service)
     {
         $this->middleware('auth:api');
         $this->bookmark = (new Bookmark())->newQuery();
+        $this->service = $service;
     }
 
     /**
@@ -56,6 +65,8 @@ class BookmarksController extends Controller
         $model = new Bookmark($attributes);
         $model->save();
 
+        $this->service->syncTags($model);
+
         return $model;
     }
 
@@ -72,6 +83,8 @@ class BookmarksController extends Controller
 
         $model->save();
 
+        $this->service->syncTags($model);
+
         return $model;
     }
 
@@ -87,6 +100,8 @@ class BookmarksController extends Controller
         $model->parent_id = $request->parentId;
 
         $model->save();
+
+        $this->service->syncTags($model);
 
         return $model;
     }
@@ -145,6 +160,10 @@ class BookmarksController extends Controller
      */
     private function find(int $id)
     {
+        // do not query if we are shore that there will not be results
+        if ($id < 1)
+            return null;
+
         /** @var Bookmark $model */
         $model = $this->bookmark->where('user_id', \Auth::user()->id)
             ->where('page_id', $id)

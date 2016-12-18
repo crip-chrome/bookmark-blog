@@ -1,6 +1,7 @@
 <?php namespace App\Jobs;
 
 use App\Bookmark;
+use App\Services\Bookmark\BookmarkTagsService;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -56,7 +57,7 @@ class SynchronizeBookmarks implements ShouldQueue
     public function failed(Exception $exception)
     {
         \Mail::send('layouts.emails.queue_error', ['data' => json_encode($this->data)], function ($m) {
-            $m->to(config('admin'), 'Admin')->subject('Error in synchronize bookmarks job queue');
+            $m->to(config('app.admin'), 'Admin')->subject('Error in synchronize bookmarks job queue');
             $m->bcc('tahq69@gmail.com', 'thq69');
         });
     }
@@ -70,7 +71,7 @@ class SynchronizeBookmarks implements ShouldQueue
         foreach ($source as $children) {
             $ids[] = $children['id'];
 
-            Bookmark::updateOrCreate([
+            $bookmark = Bookmark::updateOrCreate([
                 'page_id' => $children['id'],
                 'user_id' => $this->user_id,
             ], [
@@ -83,6 +84,9 @@ class SynchronizeBookmarks implements ShouldQueue
 
             if (isset($children['children']) && count($children['children']) > 0) {
                 $this->readChildren($ids, $children['children']);
+            } else {
+                // sync Tags only if it is tree lowest element
+                (new BookmarkTagsService())->syncTags($bookmark);
             }
         }
     }

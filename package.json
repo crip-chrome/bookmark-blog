@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "queue:bookmarks": "php artisan queue:work database --queue=bookmarks",
     "prod": "gulp --mode release",
     "dev": "gulp"
   },
