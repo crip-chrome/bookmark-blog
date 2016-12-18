@@ -3,6 +3,7 @@
 @section('content')
   <div class="container">
     <div class="row">
+
       <div class="col-md-8">
         <div class="panel panel-default">
           @if($related_to)
@@ -20,9 +21,10 @@
 
                 <p><a href="{{$bookmark->url}}" target="_blank"
                       title="{{$bookmark->url}}">{{ $bookmark->title ? $bookmark->title : $bookmark->url }}</a>
-                  by <a href="{{route('author', ['author_id' => $bookmark->user->id])}}"
-                        title="{{$bookmark->user->name}}">{{$bookmark->user->name}}</a><br>
-                  @include('bookmarks.shared.tags', ['tags' => $bookmark->tags, 'active' => $tag_id])
+
+                  by {!! Form::authorLink($bookmark->user, $author_id, '', '') !!}<br>
+
+                  {!! Form::tagList($bookmark->tags, $tag_id) !!}
                 </p>
 
               @endforeach
@@ -36,14 +38,27 @@
           </div>
         </div>
       </div>
+
       <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">Tags</div>
           <div class="panel-body">
-            @include('bookmarks.shared.tags', ['tags' => $tags, 'active' => $tag_id])
+            {!! Form::tagList($tags, $tag_id) !!}
           </div>
         </div>
       </div>
+
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Authors</div>
+          <div class="panel-body">
+            @foreach($authors as $author)
+              {!! Form::authorLink($author, $author_id) !!}
+            @endforeach
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 @endsection

@@ -15,7 +15,8 @@ class BookmarkTagsService
     public function syncTags(Bookmark $bookmark)
     {
         $page_id = $bookmark->page_id;
-        $tags = $this->relatedTags($page_id);
+        $user_id = $bookmark->user_id;
+        $tags = $this->relatedTags($page_id, $user_id);
         $ids = collect($tags)->map(function ($tag) use ($page_id) {
             // do not create tag from self
             if ($tag->page_id == $page_id)
@@ -41,29 +42,27 @@ class BookmarkTagsService
      * Get all related/unrelated tags for bookmark
      *
      * @param int $page_id
+     * @param int $user_id
      * @return array
      */
-    private function relatedTags(int $page_id)
+    private function relatedTags(int $page_id, int $user_id)
     {
-        $bookmark_table = (new Bookmark())->getTable();
-        $tag_table = (new Tag())->getTable();
-
         $tags = \DB::select("
-            SELECT B.id, B.page_id, B.title, T.id as tag_id
+            SELECT B.`id`, B.`page_id`, B.`title`, T.`id` AS `tag_id`
             FROM (
                 SELECT
                     @r AS _id,
-                    (SELECT @r := parent_id FROM $bookmark_table WHERE page_id = _id) AS parent_id,
-                    (SELECT user_id FROM $bookmark_table WHERE page_id = _id) as user_id,
-                    @l := @l + 1 AS lvl
+                    (SELECT @r := `parent_id` FROM `bookmarks` WHERE `page_id` = `_id` AND `user_id` = ?) AS `parent_id`,
+                    '?' as `user_id`,
+                    @l := @l + 1 AS `lvl`
                 FROM
                     (SELECT @r := ?, @l := 0) vars,
-                    $bookmark_table h
+                    `bookmarks` h
                 WHERE @r <> 0 AND @r <> 1) C
-            JOIN $bookmark_table B ON C._id = B.page_id AND C.user_id = B.user_id
-            LEFT JOIN $tag_table T ON T.tag = B.title
+            JOIN `bookmarks` B ON C.`_id` = B.`page_id` AND C.`user_id` = B.`user_id`
+            LEFT JOIN `tags` AS T ON T.`tag` = B.`title`
             ORDER BY C.lvl DESC
-        ", [$page_id]);
+        ", [$user_id, $user_id, $page_id]);
 
         return $tags;
     }

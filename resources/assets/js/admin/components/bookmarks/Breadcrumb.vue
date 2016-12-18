@@ -14,8 +14,8 @@
 
         computed: {
             tree() {
-                var tree = [];
-                var unshiftParentToTree = b => {
+                let tree = [];
+                const unshiftParentToTree = b => {
                     if (b.parent) {
                         tree.unshift(b.parent);
                         unshiftParentToTree(b.parent);

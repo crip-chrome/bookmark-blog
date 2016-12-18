@@ -3,6 +3,8 @@
 use App\Bookmark;
 use App\Tag;
 use App\User;
+use DB;
+use View;
 
 /**
  * Class BookmarksController
@@ -36,6 +38,14 @@ class BookmarksController extends Controller
         $this->bookmark = $bookmark;
         $this->tag = $tag;
         $this->user = $user;
+
+        View::share([
+            'tag_id' => 0,
+            'related_to' => null,
+            'author_id' => 0,
+            'tags' => $this->getMostUsedTags(),
+            'authors' => $this->getMostPopularAuthors()
+        ]);
     }
 
     /**
@@ -43,15 +53,11 @@ class BookmarksController extends Controller
      */
     public function index()
     {
-        $tag_id = null;
-        $related_to = null;
         $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags'])
             ->where('url', '<>', '')->where('visible', true)->paginate();
-
         $days = $this->toGroupedList($paging);
-        $tags = $this->getMostUsedTags();
 
-        return view('bookmarks.home')->with(compact('days', 'paging', 'tags', 'tag_id', 'related_to'));
+        return view('bookmarks.home')->with(compact('days', 'paging'));
     }
 
     /**
@@ -62,7 +68,6 @@ class BookmarksController extends Controller
      */
     public function author(int $author_id)
     {
-        $tag_id = null;
         $author = $this->user->newQuery()->where('id', $author_id)->firstOrFail();
         $related_to = $author->name;
 
@@ -70,9 +75,8 @@ class BookmarksController extends Controller
             ->where('url', '<>', '')->where('visible', true)->where('user_id', $author_id)->paginate();
 
         $days = $this->toGroupedList($paging);
-        $tags = $this->getMostUsedTags();
 
-        return view('bookmarks.home')->with(compact('days', 'paging', 'tags', 'tag_id', 'related_to'));
+        return view('bookmarks.home')->with(compact('days', 'paging', 'related_to', 'author_id'));
     }
 
     /**
@@ -87,18 +91,15 @@ class BookmarksController extends Controller
         $related_to = $tag->tag;
         $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags'])
             ->where('url', '<>', '')->where('visible', true)->whereIn('id', function ($q) use ($tag_id) {
-                $bookmark_tags = Tag::$bookmarks;
-                $tags = $this->tag->getTable();
-                $q->from("${$bookmark_tags} as pivot")
-                    ->join("${$tags} as t", 't.id', '=', 'pivot.tag_id')
+                $q->from("bookmark_tags AS pivot")
+                    ->join("tags AS t", 't.id', '=', 'pivot.tag_id')
                     ->where('t.id', $tag_id)
                     ->select('pivot.bookmark_id');
             })->paginate();
 
         $days = $this->toGroupedList($paging);
-        $tags = $this->getMostUsedTags();
 
-        return view('bookmarks.home')->with(compact('days', 'paging', 'tags', 'tag_id', 'related_to'));
+        return view('bookmarks.home')->with(compact('days', 'paging', 'tag_id', 'related_to'));
     }
 
     /**
@@ -123,15 +124,28 @@ class BookmarksController extends Controller
 
     /**
      * @param int $count
-     * @param int $minimum_tags
+     * @param int $min_tags
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    private function getMostUsedTags(int $count = 25, int $minimum_tags = 5)
+    private function getMostUsedTags(int $count = 25, int $min_tags = 5)
     {
-        $bookmark_tags = Tag::$bookmarks;
         return $this->tag->newQuery()->join(
-            \DB::raw("(SELECT tag_id, COUNT(tag_id) as tag_count FROM ${$bookmark_tags} GROUP BY tag_id) AS tc"),
-            'tags.id', '=', 'tc.tag_id'
-        )->where('tag_count', '>', $minimum_tags)->orderBy('tag_count', 'desc')->limit($count)->get();
+            DB::raw("(SELECT `pivot`.`tag_id`, COUNT(`pivot`.`tag_id`) AS `tag_count` FROM `bookmark_tags` as `pivot`
+                LEFT JOIN `bookmarks` as `b` ON `b`.`id` = `pivot`.`bookmark_id`
+                WHERE `b`.`visible` = 1
+                GROUP BY `tag_id`) AS `tc`"),
+            "tags.id", '=', 'tc.tag_id'
+        )->where('tag_count', '>', $min_tags)->orderBy('tag_count', 'desc')->limit($count)->get();
+    }
+
+    /**
+     * @param int $count
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    private function getMostPopularAuthors(int $count = 25)
+    {
+        return $this->user->newQuery()->join('bookmarks', 'users.id', '=', 'bookmarks.user_id')->limit($count)
+            ->groupBy('users.id', 'users.name')->where('bookmarks.visible', 1)->orderBy('bookmark_count', 'desc')
+            ->get(['users.id', 'users.name', DB::raw('count(`bookmarks`.`id`) as bookmark_count')]);
     }
 }

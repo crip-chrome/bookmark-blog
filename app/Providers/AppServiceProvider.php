@@ -1,9 +1,12 @@
-<?php
+<?php namespace App\Providers;
 
-namespace App\Providers;
-
+use App\Services\Html\FormMacro;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -11,6 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        new FormMacro();
     }
 
     /**

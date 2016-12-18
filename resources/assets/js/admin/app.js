@@ -1,7 +1,5 @@
 import 'es6-promise/auto';
 window.$ = window.jQuery = require('jquery');
-window.noop = function () {
-};
 
 import Vue from 'vue';
 import App from './components/App.vue';
