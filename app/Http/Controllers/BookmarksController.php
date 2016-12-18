@@ -134,18 +134,20 @@ class BookmarksController extends Controller
                 LEFT JOIN `bookmarks` as `b` ON `b`.`id` = `pivot`.`bookmark_id`
                 WHERE `b`.`visible` = 1
                 GROUP BY `tag_id`) AS `tc`"),
-            "tags.id", '=', 'tc.tag_id'
+            'tags.id', '=', 'tc.tag_id'
         )->where('tag_count', '>', $min_tags)->orderBy('tag_count', 'desc')->limit($count)->get();
     }
 
     /**
      * @param int $count
+     * @param int $min_bookmarks
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    private function getMostPopularAuthors(int $count = 25)
+    private function getMostPopularAuthors(int $count = 25, int $min_bookmarks = 10)
     {
         return $this->user->newQuery()->join('bookmarks', 'users.id', '=', 'bookmarks.user_id')->limit($count)
-            ->groupBy('users.id', 'users.name')->where('bookmarks.visible', 1)->orderBy('bookmark_count', 'desc')
-            ->get(['users.id', 'users.name', DB::raw('count(`bookmarks`.`id`) as bookmark_count')]);
+            ->where('bookmarks.visible', 1)->having(DB::raw('count(`bookmarks`.`id`)'), '>', $min_bookmarks)
+            ->orderBy('bookmark_count', 'desc')->groupBy('users.id', 'users.name')
+            ->get(['users.id', 'users.name', DB::raw('count(`bookmarks`.`id`) as `bookmark_count`')]);
     }
 }
