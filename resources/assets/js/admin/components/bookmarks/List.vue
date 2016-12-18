@@ -19,19 +19,22 @@
           <thead>
           <tr>
             <th>#</th>
+            <th></th>
             <th>Title</th>
             <th>URL</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
-          <router-link v-for="b in bookmark.children" :to="getRoute(b)" tag="tr"
+          <router-link v-for="bookmark in bookmark.children" :to="getRoute(bookmark)" tag="tr"
                        class="pointee">
-            <td :class="{ 'text-success': b.visible, 'text-danger': !b.visible }">{{ b.page_id }}</td>
-            <td>{{ b.title }}</td>
-            <td>{{ b.url }}</td>
+            <td :class="{ 'text-success': bookmark.visible, 'text-danger': !bookmark.visible }">{{ bookmark.page_id }}
+            </td>
+            <td @click.prevent="saveVisibility(bookmark)"><input type="checkbox" v-model="bookmark.visible"></td>
+            <td>{{ bookmark.title }}</td>
+            <td>{{ bookmark.url }}</td>
             <td>
-              <router-link :to="{name: 'bookmark-edit',params: {page: b.parent_id,bookmark: b.page_id}}">
+              <router-link :to="{name: 'bookmark-edit',params: {page: bookmark.parent_id, bookmark: bookmark.page_id}}">
                 Edit
               </router-link>
             </td>
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import Breadcrumb from './Breadcrumb.vue';
 
     export default {
@@ -96,6 +100,14 @@
                 }
 
                 return {name: 'bookmarks', params: {page: bookmark.page_id}};
+            },
+
+            saveVisibility (bookmark) {
+                Vue.set(bookmark, 'visible', !bookmark.visible);
+                const url = `/private/api/v1/bookmarks/${bookmark.page_id}`;
+                this.$http
+                    .post(url, bookmark)
+                    .then(_ => this.loadPage());
             },
 
         },

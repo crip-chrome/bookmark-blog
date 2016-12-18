@@ -25,7 +25,7 @@ export default class BuildEs {
 
     setWatch() {
         this._watch = watchify(this._browsify);
-        this._watch.on('update', this.bundle);
+        this._watch.on('update', this.bundle.bind(this));
         this._watch.on('log', gutil.log);
     }
 

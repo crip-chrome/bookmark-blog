@@ -93,8 +93,9 @@
 
             save() {
                 let page_id = this.$route.params.bookmark;
+                const url = `/private/api/v1/bookmarks/${page_id}`;
                 this.$http
-                    .post(`/private/api/v1/bookmarks/${page_id}`, this.bookmark)
+                    .post(url, this.bookmark)
                     .then(r => this.close());
             }
 
