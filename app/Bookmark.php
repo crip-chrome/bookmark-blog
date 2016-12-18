@@ -109,6 +109,6 @@ class Bookmark extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, Tag::$bookmarks, 'tag_id', 'bookmark_id');
+        return $this->belongsToMany(Tag::class, Tag::$bookmarks, 'bookmark_id', 'tag_id');
     }
 }
