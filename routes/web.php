@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Routing\Router;
+
 Route::get('/', function () {
     return redirect('home');
 });
@@ -24,7 +26,11 @@ Route::get('/home', 'BookmarksController@index')->name('home');
 Route::get('/author/{author_id}', 'BookmarksController@author')->name('author');
 Route::get('/tag/{tag_id}', 'BookmarksController@tag')->name('tag');
 
-Route::group(['prefix' => 'private/api/v1/bookmarks'], function (\Illuminate\Routing\Router $router) {
-    $router->get('{page_id}', 'Admin\\BookmarksApiController@getBookmark');
-    $router->post('{page_id}', 'Admin\\BookmarksApiController@saveBookmark');
+Route::group(['prefix' => 'private/api/v1'], function (Router $router) {
+    $router->group(['prefix' => 'bookmarks'], function (Router $router) {
+        $router->get('{page_id}', 'Admin\\BookmarksApiController@getBookmark');
+        $router->post('{page_id}', 'Admin\\BookmarksApiController@saveBookmark');
+    });
+
+    $router->resource('categories', 'Admin\\CategoriesApiController', ['only' => ['index']]);
 });

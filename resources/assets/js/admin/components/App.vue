@@ -34,6 +34,9 @@
                   <router-link :to="root_route">Bookmarks</router-link>
                 </li>
                 <li>
+                  <router-link :to="categoriesRoute">Categories</router-link>
+                </li>
+                <li>
                   <router-link :to="{ name: 'tokens' }">Authorizations</router-link>
                 </li>
                 <li>
@@ -76,6 +79,9 @@
                     params: {
                         page: $('meta[name="root-bookmark"]').attr('content')
                     }
+                },
+                categoriesRoute: {
+                    name: 'categories'
                 }
             }
 

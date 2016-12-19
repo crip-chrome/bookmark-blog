@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" v-if="hasUrl">
           <label for="url" class="col-sm-2 control-label">URL</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="url" disabled v-model="bookmark.url">
@@ -73,6 +73,14 @@
             this.$http
                 .get(`/private/api/v1/bookmarks/${page_id}`)
                 .then(response => this.bookmark = response.data);
+        },
+
+        computed: {
+
+            hasUrl() {
+                return !!this.bookmark.url;
+            }
+
         },
 
         data() {
