@@ -5,18 +5,34 @@
     "prod": "gulp --mode release",
     "dev": "gulp"
   },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "vue": "global:Vue",
+    "vue-router": "global:VueRouter",
+    "vue-resource": "global:VueResource",
+    "vuex": "global:Vuex"
+  },
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-preset-es2015": "^6.18.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
+    "browserify-shim": "^3.8.12",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
+    "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.0.0",
     "gulp-sourcemaps": "^1.9.1",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "^3.0.7",
+    "select2": "^4.0.3",
+    "select2-bootstrap-theme": "0.1.0-beta.9",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vueify": "^9.4.0",

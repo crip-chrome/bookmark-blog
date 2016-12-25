@@ -44,6 +44,13 @@
         </div>
 
         <div class="form-group">
+          <label for="category" class="col-sm-2 control-label">Category</label>
+          <div class="col-sm-10">
+            <select2 id="category" :options="category.options" v-model="bookmark.category_id"></select2>
+          </div>
+        </div>
+
+        <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
               <label>
@@ -64,7 +71,8 @@
 </template>
 
 <script>
-    import Modal from '../bootstrap/Modal.vue';
+    import Modal from './../bootstrap/Modal.vue'
+    import Select2 from './../bootstrap/Select2.vue'
 
     export default {
 
@@ -85,7 +93,10 @@
 
         data() {
             return {
-                bookmark: {}
+                bookmark: {},
+                category: {
+                    options: []
+                }
             }
         },
 
@@ -110,7 +121,8 @@
         },
 
         components: {
-            modal: Modal
+            modal: Modal,
+            select2: Select2
         },
 
     }

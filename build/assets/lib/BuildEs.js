@@ -11,41 +11,47 @@ import babelify from 'babelify'
 
 import config from './../config'
 
+const setWatch = Symbol('set_watch');
+const releaseMode = Symbol('release');
+const debugMode = Symbol('debug');
+const propBrowsify = Symbol('browsify');
+const propWatchify = Symbol('watchify');
+
 export default class BuildEs {
     constructor(entries, outputName, paths = ['./node_modules'], basedir = '.') {
         this.out = outputName;
         const debug = !config.release;
 
-        this._browsify = browserify({
+        this[propBrowsify] = browserify({
             basedir, entries, paths, debug
         }).transform(vueify).transform(babelify);
 
-        if (debug) this.setWatch();
+        if (debug) this[setWatch]();
     }
 
-    setWatch() {
-        this._watch = watchify(this._browsify);
-        this._watch.on('update', this.bundle.bind(this));
-        this._watch.on('log', gutil.log);
+    [setWatch]() {
+        this[propWatchify] = watchify(this[propBrowsify]);
+        this[propWatchify].on('update', this.bundle.bind(this));
+        this[propWatchify].on('log', gutil.log);
     }
 
     bundle() {
         if (config.release)
-            return this.release();
+            return this[releaseMode]();
 
-        return this.debug();
+        return this[debugMode]();
     }
 
-    release() {
-        return this._browsify.bundle()
+    [releaseMode]() {
+        return this[propBrowsify].bundle()
             .pipe(source(this.out))
             .pipe(buffer())
             .pipe(uglify())
             .pipe(gulp.dest(config.distJs));
     }
 
-    debug() {
-        return this._watch.bundle()
+    [debugMode]() {
+        return this[propWatchify].bundle()
             .pipe(source(this.out))
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))

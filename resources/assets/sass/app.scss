@@ -2,6 +2,11 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 // Variables
 @import "variables";
+
+// Plugins
+@import "node_modules/select2/dist/css/select2";
+@import "node_modules/select2-bootstrap-theme/src/select2-bootstrap";
+
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
