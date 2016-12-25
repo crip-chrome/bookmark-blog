@@ -7,10 +7,9 @@
       </div>
       <div class="modal-body">
         <ul class="list-group">
-          <li class="list-group-item">Parent id: {{ bookmark.parent_id }}</li>
-          <li class="list-group-item">Page id: {{ bookmark.page_id }}</li>
           <li class="list-group-item">Date added: {{ bookmark.date_added }}</li>
           <li class="list-group-item">URL: {{ bookmark.url }}</li>
+          <li class="list-group-item">Category: {{ bookmark.category_id ? bookmark.category.title : '' }}</li>
         </ul>
       </div>
     </modal>

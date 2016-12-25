@@ -112,4 +112,12 @@ class Bookmark extends Model
     {
         return $this->belongsToMany(Tag::class, Tag::$bookmarks, 'bookmark_id', 'tag_id');
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }
