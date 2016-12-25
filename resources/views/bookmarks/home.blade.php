@@ -22,7 +22,10 @@
                 <p><a href="{{$bookmark->url}}" target="_blank"
                       title="{{$bookmark->url}}">{{ $bookmark->title ? $bookmark->title : $bookmark->url }}</a>
 
-                  by {!! Form::authorLink($bookmark->user, $author_id, '', '') !!}<br>
+                  by {!! Form::authorLink($bookmark->user, $author_id, '', '') !!}
+                  @if(!$category_id && $bookmark->category)
+                    for {!! Form::categoryLink($bookmark->category, $category_id, '', '') !!}
+                  @endif<br>
 
                   {!! Form::tagList($bookmark->tags, $tag_id) !!}
                 </p>
@@ -35,6 +38,15 @@
             <div class="text-center">
               {{ $paging->links() }}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">Categories</div>
+          <div class="panel-body">
+            {!! Form::categoryList($categories, $category_id) !!}
           </div>
         </div>
       </div>

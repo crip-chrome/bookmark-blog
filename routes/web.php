@@ -25,6 +25,7 @@ Route::get('/admin/{subs?}', 'Admin\\HomeController@index')->name('admin')->wher
 Route::get('/home', 'BookmarksController@index')->name('home');
 Route::get('/author/{author_id}', 'BookmarksController@author')->name('author');
 Route::get('/tag/{tag_id}', 'BookmarksController@tag')->name('tag');
+Route::get('/category/{category_id}', 'BookmarksController@category')->name('category');
 
 Route::group(['prefix' => 'private/api/v1'], function (Router $router) {
     $router->group(['prefix' => 'bookmarks'], function (Router $router) {
