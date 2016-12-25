@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class Category
@@ -24,4 +25,12 @@ class Category extends Model
         'title',
         'created_by'
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

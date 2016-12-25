@@ -2,6 +2,8 @@
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use DB;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -30,8 +32,28 @@ class CategoriesApiController extends Controller
      */
     public function index()
     {
-        $categories = $this->category->newQuery()->get();
+        $categories = $this->category->newQuery()->with(['author' => function($q) {
+            $q->select(['id', 'name']);
+        }])->leftJoin('bookmarks', 'bookmarks.category_id', '=', 'categories.id')
+            ->groupBy('categories.id', 'categories.title', 'categories.created_by')
+            ->get(['categories.id', 'categories.title', 'categories.created_by', DB::raw('count(bookmarks.id) as usages')]);
 
         return new JsonResponse($categories);
+    }
+
+    /**
+     * Store category in database
+     *
+     * @param StoreCategoryRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreCategoryRequest $request)
+    {
+        $model = $request->only(['title']);
+        $model['created_by'] = \Auth::user()->id;
+
+        $category = (new Category($model))->save();
+
+        return new JsonResponse($category);
     }
 }

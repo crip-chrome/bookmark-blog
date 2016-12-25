@@ -50,7 +50,8 @@ export default class BuildEs {
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())
-            .pipe(sourcemaps.write('.'))
+            // Avoid writing to external as browsers does not update when new version is there
+            .pipe(sourcemaps.write())
             .pipe(gulp.dest(config.distJs));
     }
 }

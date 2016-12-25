@@ -5,7 +5,7 @@
         <div class="a">
           <span>Personal Access Tokens</span>
 
-          <a class="action-link" @click="showCreateTokenForm">Create New Token</a>
+          <a class="action-link" @click.prevent="showCreateTokenForm">Create New Token</a>
         </div>
       </div>
 

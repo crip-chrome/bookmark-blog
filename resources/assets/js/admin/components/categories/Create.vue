@@ -10,11 +10,15 @@
     <div class="modal-body">
       <form class="form-horizontal" role="form" @submit.prevent="store">
         <!-- Name -->
-        <div class="form-group">
+        <div class="form-group" :class="{'has-error': errors.title}">
           <label class="col-md-4 control-label" for="create-category-name">Title</label>
 
           <div class="col-md-6">
             <input id="create-category-name" type="text" class="form-control" name="title" v-model="form.title">
+
+            <ul class="help-block" v-if="errors.title">
+              <li v-for="error in errors.title">{{ error }}</li>
+            </ul>
           </div>
         </div>
       </form>
@@ -30,7 +34,8 @@
 </template>
 
 <script>
-    import Modal from './../bootstrap/Modal.vue';
+    import Vue from 'vue'
+    import Modal from './../bootstrap/Modal.vue'
 
     export default {
 
@@ -38,9 +43,9 @@
 
             return {
                 form: {
-                    title: '',
-                    errors: []
-                }
+                    title: ''
+                },
+                errors: {}
             }
 
         },
@@ -56,7 +61,15 @@
             },
 
             store() {
-                console.log('store::click', this.form);
+                const url = `/private/api/v1/categories`;
+                this.$http
+                    .post(url, this.form)
+                    .then(
+                        r => this.onHide(),
+                        ({data}) => {
+                            Vue.set(this, 'errors', data);
+                        }
+                    );
             },
 
         },

@@ -6,12 +6,19 @@
         <div class="a">
           <span>Categories</span>
 
-          <a class="action-link pull-right" href @click="showCreateCategoryForm">Create New Category</a>
+          <router-link :to="{name: 'category-create'}" class="action-link pull-right">Create New Category</router-link>
         </div>
       </div>
 
       <div class="panel-body">
-        Body
+
+        <ul class="list-group">
+          <li class="list-group-item" v-for="category in categories">
+            <span class="badge">{{category.usages}}</span>
+            {{category.title}} by {{category.author.name}}
+          </li>
+        </ul>
+
       </div>
     </div>
 
@@ -35,10 +42,6 @@
 
         methods: {
 
-            showCreateCategoryForm() {
-                this.$router.push({name: 'category-create'});
-            },
-
             getCategories() {
                 this.categories = [];
                 this.$http.get('/private/api/v1/categories').then(response => {
@@ -46,7 +49,15 @@
                 });
             }
 
-        }
+        },
+
+        watch: {
+            '$route' () {
+                // ensure that there is no backdrops when entering this route
+                $('.modal-backdrop').remove();
+                this.getCategories();
+            }
+        },
 
     }
 </script>
