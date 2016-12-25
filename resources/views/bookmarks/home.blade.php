@@ -6,11 +6,7 @@
 
       <div class="col-md-8">
         <div class="panel panel-default">
-          @if($related_to)
-            <div class="panel-heading">Bookmarks related to '{{$related_to}}'</div>
-          @else
-            <div class="panel-heading">Latest bookmarks</div>
-          @endif
+          <div class="panel-heading">People shared bookmarks</div>
           <div class="panel-body">
 
             @foreach($days as $day => $bookmarks)
@@ -22,10 +18,12 @@
                 <p><a href="{{$bookmark->url}}" target="_blank"
                       title="{{$bookmark->url}}">{{ $bookmark->title ? $bookmark->title : $bookmark->url }}</a>
 
-                  <br>{!! Form::authorLink($bookmark->user, $author_id, 'label label-success') !!}
-                  {!! Form::categoryLink($bookmark->category, $category_id, 'label label-default') !!}<br>
+                  <br>{!! Form::filter($bookmark->user, 'name', $filters, 'a', 'label label-success') !!}
+                  {!! Form::filter($bookmark->category, 'title', $filters, 'c', 'label label-default') !!}<br>
 
-                  {!! Form::tagList($bookmark->tags, $tag_id) !!}
+                  @foreach($bookmark->tags as $tag)
+                    {!! Form::filter($tag, 'tag', $filters, 't') !!}
+                  @endforeach
                 </p>
 
               @endforeach
@@ -45,7 +43,7 @@
           <div class="panel-heading">Authors</div>
           <div class="panel-body">
             @foreach($authors as $author)
-              {!! Form::authorLink($author, $author_id, 'label label-success') !!}
+              {!! Form::filter($author, 'name', $filters, 'a', 'label label-success') !!}
             @endforeach
           </div>
         </div>
@@ -55,7 +53,9 @@
         <div class="panel panel-default">
           <div class="panel-heading">Categories</div>
           <div class="panel-body">
-            {!! Form::categoryList($categories, $category_id, 'label label-default') !!}
+            @foreach($categories as $category)
+              {!! Form::filter($category, 'title', $filters, 'c', 'label label-default') !!}
+            @endforeach
           </div>
         </div>
       </div>
@@ -64,7 +64,9 @@
         <div class="panel panel-default">
           <div class="panel-heading">Tags</div>
           <div class="panel-body">
-            {!! Form::tagList($tags, $tag_id) !!}
+            @foreach($tags as $tag)
+              {!! Form::filter($tag, 'tag', $filters, 't') !!}
+            @endforeach
           </div>
         </div>
       </div>

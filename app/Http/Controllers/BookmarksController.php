@@ -5,6 +5,7 @@ use App\Category;
 use App\Tag;
 use App\User;
 use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use View;
 
@@ -49,10 +50,6 @@ class BookmarksController extends Controller
         $this->category = $category;
 
         View::share([
-            'related_to' => null,
-            'tag_id' => 0,
-            'author_id' => 0,
-            'category_id' => 0,
             'tags' => $this->getMostUsedTags(),
             'authors' => $this->getMostPopularAuthors(),
             'categories' => $this->getMostUsedCategories()
@@ -60,74 +57,54 @@ class BookmarksController extends Controller
     }
 
     /**
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags', 'category'])
-            ->where('url', '<>', '')->where('visible', true)->paginate();
-        $days = $this->toGroupedList($paging);
+        // t - tags
+        // a - authors
+        // c - categories
+        $filters = $request->only('t', 'a', 'c');
 
-        return view('bookmarks.home')->with(compact('days', 'paging'));
-    }
+        $query = $this->bookmark->newQuery()->where('url', '<>', '')->where('visible', true)
+            ->with([
+                'user' => function ($query) {
+                    $query->select(['id', 'name']);
+                },
+                'tags' => function ($query) {
+                    $query->select(['tags.id', 'tags.tag']);
+                },
+                'category' => function ($query) {
+                    $query->select(['id', 'title']);
+                }
+            ])->orderBy('date_added', 'desc');
 
-    /**
-     * Display bookmarks related to author
-     *
-     * @param int $author_id
-     * @return $this
-     */
-    public function author(int $author_id)
-    {
-        $author = $this->user->newQuery()->where('id', $author_id)->firstOrFail();
-        $related_to = $author->name;
+        // adding filters for authors
+        if ($filters['a']) {
+            $query = $query->whereIn('user_id', $filters['a']);
+        }
 
-        $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags', 'category'])
-            ->where('url', '<>', '')->where('visible', true)->where('user_id', $author_id)->paginate();
+        // adding filters for categories
+        if ($filters['c']) {
+            $query = $query->whereIn('category_id', $filters['c']);
+        }
 
-        $days = $this->toGroupedList($paging);
-
-        return view('bookmarks.home')->with(compact('days', 'paging', 'related_to', 'author_id'));
-    }
-
-    /**
-     * Display bookmarks related to tag
-     *
-     * @param int $tag_id
-     * @return $this
-     */
-    public function tag(int $tag_id)
-    {
-        $tag = $this->tag->newQuery()->where('id', $tag_id)->firstOrFail();
-        $related_to = $tag->tag;
-        $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags', 'category'])
-            ->where('url', '<>', '')->where('visible', true)->whereIn('id', function ($q) use ($tag_id) {
-                $q->from("bookmark_tags AS pivot")
-                    ->join("tags AS t", 't.id', '=', 'pivot.tag_id')
-                    ->where('t.id', $tag_id)
+        // adding filters for tags
+        if ($filters['t']) {
+            $tags = $filters['t'];
+            $query = $query->whereIn('id', function ($q) use ($tags) {
+                $q->from('bookmark_tags AS pivot')
+                    ->join('tags AS t', 't.id', '=', 'pivot.tag_id')
+                    ->whereIn('t.id', $tags)
                     ->select('pivot.bookmark_id');
-            })->paginate();
+            });
+        }
 
+        $paging = $query->paginate()->appends($request->except('page'));
         $days = $this->toGroupedList($paging);
 
-        return view('bookmarks.home')->with(compact('days', 'paging', 'tag_id', 'related_to'));
-    }
-
-    /**
-     * Display bookmarks related to category
-     *
-     * @param int $category_id
-     * @return mixed
-     */
-    public function category(int $category_id) {
-        $category = $this->category->newQuery()->where('id', $category_id)->firstOrFail(['id', 'title']);
-        $related_to = $category->title;
-        $paging = $this->bookmark->newQuery()->orderBy('date_added', false)->with(['user', 'tags', 'category'])
-            ->where('url', '<>', '')->where('visible', true)->where('category_id', $category_id)->paginate();
-
-        $days = $this->toGroupedList($paging);
-
-        return view('bookmarks.home')->with(compact('days', 'paging', 'category_id', 'related_to'));
+        return view('bookmarks.home')->with(compact('days', 'paging', 'filters'));
     }
 
     /**
@@ -188,10 +165,10 @@ class BookmarksController extends Controller
     {
         $categories = $this->category->newQuery()->join('bookmarks', 'bookmarks.category_id', '=', 'categories.id')
             ->select(['categories.id', 'categories.title', DB::raw('COUNT(`bookmarks`.`id`) AS `usages`')])
-            ->where('bookmarks.visible', 1) //// ->where('usages', '>', $min_usages) // sql error on where
+            ->where('bookmarks.visible', 1)//// ->where('usages', '>', $min_usages) // sql error on where
             ->groupBy('categories.id', 'categories.title')->orderBy('usages', 'desc')->limit($count)->get();
 
-        return $categories->filter(function($item) use ($min_usages) {
+        return $categories->filter(function ($item) use ($min_usages) {
             return $item->usages > $min_usages;
         });
     }
