@@ -36,7 +36,7 @@ class BookmarksApiController extends Controller
         $relations = $this->implodeQuery('parent');
         $relations[] = 'category';
         $relations['children'] = function ($query) {
-            $query->orderBy('index')->currentUser()->orderBy('date_added');
+            $query->orderBy('index')->currentUser()->orderBy('date_added')->with('category');
         };
 
         $bookmark = $this->bookmark->newQuery()->currentUser()->page($page_id)

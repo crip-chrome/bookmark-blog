@@ -9,27 +9,6 @@
       <form class="modal-body form-horizontal">
 
         <div class="form-group">
-          <label for="title" class="col-sm-2 control-label">Title</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="title" disabled v-model="bookmark.title">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="parent_id" class="col-sm-2 control-label">Parent id</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="parent_id" disabled v-model="bookmark.parent_id">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="page_id" class="col-sm-2 control-label">Page id</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="page_id" disabled v-model="bookmark.page_id">
-          </div>
-        </div>
-
-        <div class="form-group">
           <label for="date_added" class="col-sm-2 control-label">Date added</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="date_added" disabled v-model="bookmark.date_added">

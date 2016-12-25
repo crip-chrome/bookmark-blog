@@ -19,20 +19,19 @@
           <thead>
           <tr>
             <th>#</th>
-            <th></th>
             <th>Title</th>
             <th>URL</th>
+            <th>Category</th>
             <th></th>
           </tr>
           </thead>
           <tbody>
           <router-link v-for="bookmark in bookmark.children" :to="getRoute(bookmark)" tag="tr"
                        class="pointee">
-            <td :class="{ 'text-success': bookmark.visible, 'text-danger': !bookmark.visible }">{{ bookmark.page_id }}
-            </td>
             <td @click.prevent="saveVisibility(bookmark)"><input type="checkbox" v-model="bookmark.visible"></td>
             <td>{{ bookmark.title }}</td>
             <td>{{ bookmark.url }}</td>
+            <td>{{ bookmark.category ? bookmark.category.title : '' }}</td>
             <td>
               <router-link :to="{name: 'bookmark-edit',params: {page: bookmark.parent_id, bookmark: bookmark.page_id}}">
                 Edit
