@@ -1,2 +1,3 @@
-window.$ = window.jQuery = require('jquery');
-require('bootstrap-sass');
+import * as log from './log'
+
+log.info('public:app:mounted()');
