@@ -64,8 +64,10 @@ class FormMacro
      */
     private function categoryLink()
     {
-        Form::macro('categoryLink', function (Category $model, $is_active = false, $class = 'label label-info',
-                                         $active_class = 'label label-primary') {
+        Form::macro('categoryLink', function (Category $model = null, $is_active = false, $class = 'label label-info',
+                                              $active_class = 'label label-primary') {
+            if (!$model)
+                return '';
 
             $href = route('category', ['category_id' => $model->id]);
             $text = $model->title;
