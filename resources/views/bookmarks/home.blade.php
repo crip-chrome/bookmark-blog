@@ -4,7 +4,7 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-md-8">
+      <div class="col-sm-8">
         <div class="panel panel-default">
           <div class="panel-heading">People shared bookmarks</div>
           <div class="panel-body">
@@ -38,7 +38,8 @@
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-sm-4">
+
         <div class="panel panel-default">
           <div class="panel-heading">Authors</div>
           <div class="panel-body">
@@ -47,9 +48,7 @@
             @endforeach
           </div>
         </div>
-      </div>
 
-      <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">Categories</div>
           <div class="panel-body">
@@ -58,9 +57,7 @@
             @endforeach
           </div>
         </div>
-      </div>
 
-      <div class="col-md-4">
         <div class="panel panel-default">
           <div class="panel-heading">Tags</div>
           <div class="panel-body">
@@ -69,6 +66,7 @@
             @endforeach
           </div>
         </div>
+
       </div>
 
     </div>
