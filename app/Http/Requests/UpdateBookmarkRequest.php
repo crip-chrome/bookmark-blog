@@ -27,7 +27,7 @@ class UpdateBookmarkRequest extends FormRequest
         return [
             'id' => 'required|exists:bookmarks,id',
             'visible' => 'required|boolean',
-            'category_id' => 'required|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id'
         ];
     }
 }

@@ -77,7 +77,10 @@ class BookmarksApiController extends Controller
     private function save($bookmark, $value, $category_id = null)
     {
         $bookmark->visible = $value;
-        $bookmark->category_id = $category_id;
+
+        if ($category_id !== null)
+            $bookmark->category_id = $category_id;
+
         $bookmark->save();
 
         foreach ($bookmark->children as $children) {
