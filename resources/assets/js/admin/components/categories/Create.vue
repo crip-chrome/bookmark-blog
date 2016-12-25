@@ -60,12 +60,16 @@
                 this.$router.push({name: 'categories'});
             },
 
+            close() {
+                $(this.$el).find('button.close').trigger('click');
+            },
+
             store() {
                 const url = `/private/api/v1/categories`;
                 this.$http
                     .post(url, this.form)
                     .then(
-                        r => this.onHide(),
+                        r => this.close(),
                         ({data}) => {
                             Vue.set(this, 'errors', data);
                         }

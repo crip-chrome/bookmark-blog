@@ -2,6 +2,7 @@
 
 use App\Bookmark;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateBookmarkRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -44,15 +45,19 @@ class BookmarksApiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UpdateBookmarkRequest $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function saveBookmark(Request $request)
+    public function saveBookmark(UpdateBookmarkRequest $request)
     {
         $bookmark = $this->bookmark->newQuery()->currentUser()->page($request->page_id)
             ->with($this->implodeQuery('children'))->firstOrFail();
 
-        $this->saveVisibility($bookmark, !!$request->visible);
+        $this->save(
+            $bookmark,
+            !!$request->visible,
+            $request->category_id ? $request->category_id : null
+        );
 
         return JsonResponse::create($bookmark);
     }
@@ -68,13 +73,14 @@ class BookmarksApiController extends Controller
         }];
     }
 
-    private function saveVisibility($bookmark, $value)
+    private function save($bookmark, $value, $category_id = null)
     {
         $bookmark->visible = $value;
+        $bookmark->category_id = $category_id;
         $bookmark->save();
 
         foreach ($bookmark->children as $children) {
-            $this->saveVisibility($children, $value);
+            $this->save($children, $value, $category_id);
         }
     }
 }

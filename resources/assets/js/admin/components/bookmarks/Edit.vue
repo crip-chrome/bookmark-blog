@@ -71,6 +71,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     import Modal from './../bootstrap/Modal.vue'
     import Select2 from './../bootstrap/Select2.vue'
 
@@ -78,6 +79,12 @@
 
         mounted() {
             let page_id = this.$route.params.bookmark;
+
+            this.$http
+                .get('/private/api/v1/categories/options')
+                .then(response => Vue.set(this.category, 'options', response.data));
+
+            // we can show bookmark only after we get options for drop down
             this.$http
                 .get(`/private/api/v1/bookmarks/${page_id}`)
                 .then(response => this.bookmark = response.data);

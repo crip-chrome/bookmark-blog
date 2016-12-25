@@ -3,12 +3,12 @@
 // Variables
 @import "variables";
 
+// Bootstrap
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
 // Plugins
 @import "node_modules/select2/dist/css/select2";
 @import "node_modules/select2-bootstrap-theme/src/select2-bootstrap";
-
-// Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
 .pointee {
   cursor: pointer;

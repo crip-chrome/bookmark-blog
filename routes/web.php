@@ -32,5 +32,6 @@ Route::group(['prefix' => 'private/api/v1'], function (Router $router) {
         $router->post('{page_id}', 'Admin\\BookmarksApiController@saveBookmark');
     });
 
+    $router->get('categories/options', 'Admin\\CategoriesApiController@options');
     $router->resource('categories', 'Admin\\CategoriesApiController', ['only' => ['index', 'store']]);
 });

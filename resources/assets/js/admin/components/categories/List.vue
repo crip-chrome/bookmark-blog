@@ -15,7 +15,7 @@
         <ul class="list-group">
           <li class="list-group-item" v-for="category in categories">
             <span class="badge">{{category.usages}}</span>
-            {{category.title}} by {{category.author.name}}
+            {{category.title}} <small class="text-muted">by {{category.author.name}}</small>
           </li>
         </ul>
 

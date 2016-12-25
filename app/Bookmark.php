@@ -32,7 +32,8 @@ class Bookmark extends Model
         'date_added',
         'title',
         'url',
-        'visible'
+        'visible',
+        'category_id',
     ];
 
     /**

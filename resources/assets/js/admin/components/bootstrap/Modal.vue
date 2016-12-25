@@ -9,6 +9,8 @@
 </template>
 
 <script>
+    import {log, info} from './../../../log'
+
     export default {
 
         props: {
@@ -17,6 +19,8 @@
         },
 
         mounted() {
+            info('modal:mounted', {el: this.$el});
+
             let el = $(this.$el);
 
             el.modal('show');

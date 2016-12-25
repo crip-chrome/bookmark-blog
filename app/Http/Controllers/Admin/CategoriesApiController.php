@@ -32,11 +32,23 @@ class CategoriesApiController extends Controller
      */
     public function index()
     {
-        $categories = $this->category->newQuery()->with(['author' => function($q) {
+        $categories = $this->category->newQuery()->with(['author' => function ($q) {
             $q->select(['id', 'name']);
         }])->leftJoin('bookmarks', 'bookmarks.category_id', '=', 'categories.id')
             ->groupBy('categories.id', 'categories.title', 'categories.created_by')
             ->get(['categories.id', 'categories.title', 'categories.created_by', DB::raw('count(bookmarks.id) as usages')]);
+
+        return new JsonResponse($categories);
+    }
+
+    /**
+     * Simple list of categories from drop downs
+     *
+     * @return JsonResponse
+     */
+    public function options()
+    {
+        $categories = $this->category->newQuery()->get(['id', DB::raw('title as text')]);
 
         return new JsonResponse($categories);
     }
