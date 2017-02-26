@@ -30,7 +30,7 @@
                        class="pointee">
             <td @click.prevent="saveVisibility(bookmark)"><input type="checkbox" v-model="bookmark.visible"></td>
             <td>{{ bookmark.title }}</td>
-            <td>{{ bookmark.url }}</td>
+            <td class="col-url">{{ bookmark.url }}</td>
             <td>{{ bookmark.category ? bookmark.category.title : '' }}</td>
             <td>
               <router-link :to="{name: 'bookmark-edit',params: {page: bookmark.parent_id, bookmark: bookmark.page_id}}">
@@ -128,6 +128,11 @@
 
   .line-through {
     text-decoration: line-through;
+  }
+
+  .col-url {
+    max-width: 430px;
+    overflow: hidden;
   }
 
 </style>
