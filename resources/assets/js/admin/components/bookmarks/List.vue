@@ -26,17 +26,18 @@
           </tr>
           </thead>
           <tbody>
-          <router-link v-for="bookmark in bookmark.children" :to="getRoute(bookmark)" tag="tr"
-                       class="pointee">
-            <td @click.prevent="saveVisibility(bookmark)"><input type="checkbox" v-model="bookmark.visible"></td>
-            <td>{{ bookmark.title }}</td>
-            <td class="col-url">{{ bookmark.url }}</td>
-            <td>{{ bookmark.category ? bookmark.category.title : '' }}</td>
-            <td>
-              <router-link :to="{name: 'bookmark-edit',params: {page: bookmark.parent_id, bookmark: bookmark.page_id}}">
-                Edit
-              </router-link>
-            </td>
+          <router-link v-for="bookmark in bookmark.children" :to="getRoute(bookmark)" tag="tr">
+            <template class="pointee">
+              <td @click.prevent="saveVisibility(bookmark)"><input type="checkbox" v-model="bookmark.visible"></td>
+              <td>{{ bookmark.title }}</td>
+              <td class="col-url">{{ bookmark.url }}</td>
+              <td>{{ bookmark.category ? bookmark.category.title : '' }}</td>
+              <td>
+                <router-link :to="{name: 'bookmark-edit',params: {page: bookmark.parent_id, bookmark: bookmark.page_id}}">
+                  Edit
+                </router-link>
+              </td>
+            </template>
           </router-link>
           </tbody>
         </table>
@@ -76,12 +77,10 @@
                 $('.modal-backdrop').remove();
 
                 page_id = page_id || this.$route.params.page;
-                if (page_id != 0) {
+                if (page_id !== 0) {
                     this.message = false;
                     this.$http.get(`/private/api/v1/bookmarks/${page_id}`)
-                        .then((response) => {
-                            this.bookmark = response.data;
-                        });
+                        .then(({data}) => { this.bookmark = data; });
                 } else {
                     this.message = true
                 }
@@ -102,7 +101,7 @@
             },
 
             saveVisibility (bookmark) {
-                Vue.set(bookmark, 'visible', !bookmark.visible);
+                bookmark.visible = !bookmark.visible;
                 const url = `/private/api/v1/bookmarks/${bookmark.page_id}`;
                 this.$http
                     .post(url, bookmark)

@@ -13,3 +13,13 @@
 .pointee {
   cursor: pointer;
 }
+
+.bookmark-panel {
+  .label {
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

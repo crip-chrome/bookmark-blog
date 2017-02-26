@@ -7,7 +7,7 @@
       <div class="col-sm-8">
         <div class="panel panel-default">
           <div class="panel-heading">People shared bookmarks</div>
-          <div class="panel-body">
+          <div class="panel-body bookmark-panel">
 
             @foreach($days as $day => $bookmarks)
 
@@ -18,8 +18,8 @@
                 <p><a href="{{$bookmark->url}}" target="_blank"
                       title="{{$bookmark->url}}">{{ $bookmark->title ? $bookmark->title : $bookmark->url }}</a>
 
-                  <br>{!! Form::filter($bookmark->user, 'name', $filters, 'a', 'label label-success') !!}
-                  {!! Form::filter($bookmark->category, 'title', $filters, 'c', 'label label-default') !!}<br>
+                  {!! Form::filter($bookmark->user, 'name', $filters, 'a', 'label label-success') !!}
+                  {!! Form::filter($bookmark->category, 'title', $filters, 'c', 'label label-default') !!}
 
                   @foreach($bookmark->tags as $tag)
                     {!! Form::filter($tag, 'tag', $filters, 't') !!}

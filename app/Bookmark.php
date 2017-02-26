@@ -43,6 +43,10 @@ class Bookmark extends Model
      */
     protected $casts = [
         'date_added' => 'datetime',
+        'page_id' => 'integer',
+        'parent_id' => 'integer',
+        'user_id' => 'integer',
+        'visible' => 'boolean',
     ];
 
     public function setDateAddedAttribute($value)
